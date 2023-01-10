@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+	<script src="https://kit.fontawesome.com/e8b767ad55.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <title>Guess the top ten Wikipedia articles</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="HandheldFriendly" content="true">
+	<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+	<script type="text/javascript" src="script.js" defer></script>
+</head>
+<body>
+    <div id="incorrect" class="alert-box hidden">
+        <div id="incorrect-text" class="alert-text">
+            <h1>Incorrect!</h1>
+        </div>
+    </div>
+    <div id="correct" class="alert-box hidden">
+        <div id="incorrect-text" class="alert-text">
+            <h1>Correct!</h1>
+        </div>
+    </div>
+    <div id="help-alert" class="alert-box hidden">
+        <div id="help-text" class="alert-text">
+            <h1>Help</h1>
+            <p>Each of the ten clues refers to one of the top ten most-read Wikipedia articles. Each has a description, initials, and the number of pageviews the article received on that day. To play, begin typing a guess in the input box at the top.</p>
+            <p>The game will filter out perennial entries in the top ten, such as technical pages used by bots and always-popular articles (e.g., "Deaths in [year]", "XXX", etc.)</p>
+            <p>The input box is pre-filled with the 1000 most-read articles of the day. You can use this to guide your guesses in the right direction.</p>
+            <p>Click on this box to dismiss it.</p>
+        </div>
+    </div>
+    <div id="game-over" class="alert-box hidden">
+        <div id="incorrect-text" class="alert-text">
+            <h1>Game over!</h1>
+            <p>You scored <span id="points"></span>/10! <span id="emoji"></span></p>
+        </div>
+    </div>
+	<div id="page-wrap">
+		<div id="header-wrap">
+			<h1 id="title">Wikipedia guessing game</h1>
+			<input type="text" list="guess-list" id="guess" name="guess" placeholder="Enter your guess here!">
+			<div id="hearts-grid">
+				<div id="help-box" class="button-box">
+					<button id="help">
+						Help
+					</button>
+				</div>
+				<div id="lives">
+					<i class="fa-solid fa-heart"></i> <i class="fa-solid fa-heart"></i> <i class="fa-solid fa-heart"></i>
+				</div>
+				<div id="give-up-box">
+					<button id="give-up" onclick="gameOver()">
+						Give up
+					</button>
+				</div>
+			</div>
+			<datalist id="guess-list">
+			</datalist>
+		</div>
+		<ul class="list">
+			<li class='answer'><span class='answer-text'></span><br /><span class='summary-text'></span><br /><span class='pageviews'></span> </li>
+			<li class='answer'><span class='answer-text'></span><br /><span class='summary-text'></span><br /><span class='pageviews'></span> </li>
+			<li class='answer'><span class='answer-text'></span><br /><span class='summary-text'></span><br /><span class='pageviews'></span> </li>
+			<li class='answer'><span class='answer-text'></span><br /><span class='summary-text'></span><br /><span class='pageviews'></span> </li>
+			<li class='answer'><span class='answer-text'></span><br /><span class='summary-text'></span><br /><span class='pageviews'></span> </li>
+			<li class='answer'><span class='answer-text'></span><br /><span class='summary-text'></span><br /><span class='pageviews'></span> </li>
+			<li class='answer'><span class='answer-text'></span><br /><span class='summary-text'></span><br /><span class='pageviews'></span> </li>
+			<li class='answer'><span class='answer-text'></span><br /><span class='summary-text'></span><br /><span class='pageviews'></span> </li>
+			<li class='answer'><span class='answer-text'></span><br /><span class='summary-text'></span><br /><span class='pageviews'></span> </li>
+			<li class='answer'><span class='answer-text'></span><br /><span class='summary-text'></span><br /><span class='pageviews'></span> </li>
+		</ul>
+	</div>
+</body>

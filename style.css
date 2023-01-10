@@ -1,0 +1,159 @@
+:root {
+    --dark-blue: #003;
+    --green: #070;
+    --red: #A10;
+    --light-blue: #ADEFFF;
+}
+
+body {
+	display: flex;
+	place-items: center;
+	background: #003;
+	margin: 0px;
+    padding: 0px;
+	font-family: "Inter", sans-serif;
+    overflow-x: hidden;
+}
+
+#page-wrap {
+	width: 600px;
+	background: #111;
+	color: white;
+	margin: 0 auto;
+	text-align: center;
+	padding: 0 3em 3em 3em;
+}
+
+.answer {
+	margin-bottom: 1em;
+	padding: 1em 2em;
+	background: #222;
+    background-position: center;
+    background-size: cover;
+    background-blend-mode: multiply;
+}
+
+ul {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+}
+
+h1 {
+	font-family: "Inter", sans-serif;
+	font-weight: 900;
+	text-transform: uppercase;
+}
+
+a {
+    color: white;
+}
+
+a:hover {
+    text-decoration: none;
+}
+
+input {
+	font-size: 1.5em;
+	font-family: "Inter", sans-serif;
+	text-align: center;
+	width: 80%;
+}
+
+strong {
+	font-weight: 700;
+}
+
+.word {
+    padding: 0 0.25em;
+}
+
+#lives {
+    display: table-cell;
+	font-size: 3em;
+	color: #A10;
+	padding: 0.5em;
+}
+
+.alert-box {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    width: 70vw;
+    height: 200px;
+    text-align: center;
+    border: 1px solid #ddd;
+    z-index: 999;
+}
+
+.alert-text {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    height: 200px;
+}
+
+#incorrect {
+    background: var(--red);
+    color: white;
+}
+
+#correct {
+    background: var(--green);
+    color: white;
+}
+
+.hidden {
+    display: none;
+}
+
+#game-over {
+    background: #444;
+    color: white;
+}
+
+button {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    color: white;
+    font-size: 1.5em;
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    border: 0;
+    cursor: pointer;
+	text-decoration: underline;
+	text-transform: uppercase;
+}
+
+#hearts-grid {
+    display: inline-grid;
+    grid-template-columns: 1fr 2fr 1fr;
+    width: 100%;
+}
+
+.button-box {
+    position: relative;
+}
+
+#help-alert {
+    background: var(--light-blue);
+    color: #111;
+    height: auto;
+}
+
+#help-text {
+    height: auto;
+    margin: 0 2em;
+}
+
+
+
+#header-wrap {
+	position: sticky;
+	top: 0;
+	background: #111;
+	padding-top: 20px;
+}
