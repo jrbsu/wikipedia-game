@@ -18,12 +18,11 @@ let articles = [],
 function getDate() {
 	let d = new Date(),
 		month = d.getMonth()+1,
-		day = d.getDate(),
-		output = d.getFullYear() + '/' + (month<10 ? '0' : '') + month + '/' + (day<10 ? '0' : '') + day, // UPDATE ME!!!
+		day = d.getDate()-1,
+		output = d.getFullYear() + '/' + (month<10 ? '0' : '') + month + '/' + (day<10 ? '0' : '') + day,
 		intl = new Intl.DateTimeFormat("en-US", {month: "long"}).format(month),
 		titleOutput = day + " " + intl + " " + d.getFullYear();
 	dataURL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia.org/all-access/" + output;
-	console.log(dataURL);
 	$('#title').html("Wikipedia guessing game:<br/>" + titleOutput);
 }
 
@@ -39,7 +38,6 @@ function randomDate() {
     //output = "2017/04/28"; // testing
     //output = "2019/02/12"; // testing
 	dataURL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia.org/all-access/" + output;
-	console.log(dataURL);
 	$('#title').html("Wikipedia guessing game:<br/>" + titleOutput);
 }
 
@@ -77,7 +75,6 @@ function getSummaries() {
 function userSubmit() {
     let guess = $('#guess').val();
 	let index = topTen.indexOf(guess);
-	console.log(guess, index, topTen);
 	if (index !== null && index !== -1) { // user is correct
 		let correctAnswer = ".answer:eq(" + index + ")";
 		$(correctAnswer + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[index] + '">' + guess + '</a></strong>');
@@ -109,13 +106,11 @@ function userSubmit() {
 
 function gameOver() {
     $('#guess').attr('disabled','disabled');
-    console.log(correctArray);
     for (var i=0;i<correctArray.length;i++) {
         let unanswered = ".answer:eq(" + correctArray[i] + ")";
         $(unanswered).css('background-color', 'var(--red)');
         $(unanswered).css('background-image', 'url(' + images[correctArray[i]] + ')');
         $(unanswered + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[correctArray[i]] + '">' + articleNamesNormalised[correctArray[i]] + '</a></strong>');
-        console.log(images[i]);
     }
     let points = 10 - correctArray.length;
     $('#points').html(points);
@@ -144,7 +139,6 @@ $('#game-over').click(function() {
 function censor(a) {
 	let w = a.split(" ");
 	let res = w.map(b => "<span class='word'>" + b.slice(0,1) + b.replace(/[A-Za-zÀ-ÖØ-öø-ÿ]/ug,"_&nbsp;").replace(/^./,"").replace(/$/,"</span>"));
-	console.log(res);
 	return res.join("");
 }
 
@@ -152,7 +146,6 @@ $(document).ready(function () {
 	getDate();
     // randomDate(); //testing
 	getData(dataURL).then((data) => {
-		console.dir(articles = data.items[0]);
 		articles = data.items[0].articles;
 		let badTitles = ["Main_Page","Special:Search","Portal:Current_events","Wikipedia:Featured_pictures","2023","Deaths in 2023","Wikipedia","XHamster","HTTP cookie","JSON Web Token","Cookie (disambiguation)","Access token","Web scraping","XXX","Web performance","Bible","Cleopatra","Undefined","Search","Creative Commons Attribution"],
             badTitlesRegex = /(Special:|Wikipedia:|File:|Help:|User:|Deaths_in|.php|List_of|disambiguation|Category:)/gi;
@@ -173,7 +166,6 @@ $(document).ready(function () {
 		}
 		titleString = titleString.slice(0, -3);
 		descURL = "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=description%7Cpageimages&titles=" + titleString + "&redirects=1&formatversion=2&piprop=thumbnail&pithumbsize=800&pilicense=any";
-        console.log(descURL);
 
 		getSummaries().then((data) => {
 			let summariesData = data.query.pages,
@@ -220,7 +212,6 @@ $(document).ready(function () {
 				$('.pageviews:eq(' + i + ')').html("(" + viewCountsCommas[i] + " pageviews)");
 				topTen.push(articleNamesNormalised[i]);
 			}
-			console.dir(data);
 		});
 	});
 });
