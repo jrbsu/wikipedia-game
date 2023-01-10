@@ -21,7 +21,7 @@ body {
 	color: white;
 	margin: 0 auto;
 	text-align: center;
-	padding: 0 3em 3em 3em;
+	padding: 0 3em 5em 3em;
 }
 
 .answer {
@@ -149,11 +149,23 @@ button {
     margin: 0 2em;
 }
 
-
-
 #header-wrap {
 	position: sticky;
 	top: 0;
 	background: #111;
 	padding-top: 20px;
+}
+
+@media screen and (max-width: 640px) {
+	h1 {
+		font-size: 50%;
+	}
+	
+	#lives {
+		font-size: 2em;
+	}
+	
+	font-size {
+		font-size: 1em;
+	}
 }
