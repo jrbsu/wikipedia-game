@@ -3,6 +3,7 @@
     --green: #070;
     --red: #A10;
     --light-blue: #ADEFFF;
+    --error: #ADEFFF;
 }
 
 body {
@@ -102,7 +103,7 @@ strong {
     display: flex;
     justify-content: center;
     flex-direction: column;
-    height: 200px;
+    max-height: 200px;
 }
 
 #incorrect {
@@ -185,4 +186,12 @@ button {
 	color: white;
 	font-weight: 700;
 	font-size: 0.7em;
+}
+
+#error-box {
+	background: var(--error);
+}
+
+#error-text {
+    margin: 0 2em;
 }
