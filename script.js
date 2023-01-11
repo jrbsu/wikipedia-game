@@ -21,8 +21,9 @@ function getDate() {
 	let d = new Date(),
 		month = d.getMonth()+1,
 		day = d.getDate()-1,
+		dateOutput = new Date(d.getFullYear(),month-1,day,0,0,0),
 		output = d.getFullYear() + '/' + (month<10 ? '0' : '') + month + '/' + (day<10 ? '0' : '') + day,
-		intl = new Intl.DateTimeFormat("en-US", {month: "long"}).format(month),
+		intl = new Intl.DateTimeFormat("en", {month: "long"}).format(dateOutput),
 		titleOutput = day + " " + intl + " " + d.getFullYear();
 	dataURL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia.org/all-access/" + output;
 	$('#title').html("Wikipedia guessing game:<br/>" + titleOutput);
@@ -32,13 +33,16 @@ function randomDate() {
     let ys = [2016,2017,2018,2019,2020,2021,2022],
         y = ys[Math.floor(Math.random() * ys.length)],
         m = Math.floor(Math.random() * 12) + 1,
-        d = Math.floor(Math.random() * 30) + 1,
-        output = y + '/' + (m<10 ? '0' : '') + m + '/' + (d<10 ? '0' : '') + d,
+        d = Math.floor(Math.random() * 30) + 1;
+	if (m == 1 || m == 3 || m == 5 || m == 7 || m == 8 || m == 10 || m == 12) {
+		d = Math.floor(Math.random() * 31) + 1;
+	} else if (m == 2) {
+		d = Math.floor(Math.random() * 28) + 1;
+	}
+	let output = y + '/' + (m<10 ? '0' : '') + m + '/' + (d<10 ? '0' : '') + d,
         dateObject = new Date(output),
         intlMonth = dateObject.toLocaleString("default", {month: "long"}),
         titleOutput = d + " " + intlMonth + " " + y;
-    //output = "2017/04/28"; // testing
-    //output = "2019/02/12"; // testing
 	dataURL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia.org/all-access/" + output;
 	$('#title').html("Wikipedia guessing game:<br/>" + titleOutput);
 }
@@ -74,86 +78,11 @@ function getSummaries() {
 	});
 }
 
-function userSubmit() {
-    let guess = $('#guess').val();
-	let index = topTen.indexOf(guess.toLowerCase());
-	if (index !== null && index !== -1) { // user is correct
-		let correctAnswer = ".answer:eq(" + index + ")";
-		$(correctAnswer + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[index] + '">' + articleNamesNormalised[index] + '</a></strong>');
-        $(correctAnswer).css('background-color', 'var(--green)');
-        $(correctAnswer).css('background-image', 'url(' + images[index] + ')');
-        if (correctArray.indexOf(index) > -1) {
-            correctArray.splice(correctArray.indexOf(index), 1);
-        }
-        $('#guess').val("");
-        $('#guess').focus();
-		points++;
-   		$('.points').html(points);
-        //$('#correct').show().delay(1000).fadeOut();
-		if (correctArray.length == 0) {
-			gameOver();			
-		}
-	} else if (index == -1) { // user is incorrect
-        lives -= 1;
-        $("i:eq(" + lives + ")").removeClass("fa-solid");
-        $("i:eq(" + lives + ")").addClass("fa-regular");
-        $('#guess').val("");
-        $('#guess').focus();
-        let randomStatement = incorectWords[Math.floor(Math.random() * incorectWords.length)];
-        $('#incorrect h1').html(randomStatement);
-        $('#incorrect').show().delay(1000).fadeOut();
-    }
-    if (lives == 0) {
-        gameOver();
-    }
-}
-
-function gameOver() {
-    $('#guess').attr('disabled','disabled');
-    for (var i=0;i<correctArray.length;i++) {
-        let unanswered = ".answer:eq(" + correctArray[i] + ")";
-        $(unanswered).css('background-color', 'var(--red)');
-        $(unanswered).css('background-image', 'url(' + images[correctArray[i]] + ')');
-        $(unanswered + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[correctArray[i]] + '">' + articleNamesNormalised[correctArray[i]] + '</a></strong>');
-    }
-    let points = 10 - correctArray.length;
-    $('.points').html(points);
-    $('#emoji').html(emoji[points]);
-    $('#game-over').removeClass('hidden');
-}
-
-$("#guess").on('keyup', function (e) {
-    if ((e.key === 'Enter' || e.keyCode === 13) && $("#guess").val().length !== 0) {
-        userSubmit();
-    }
-});
-
-$("#help").click(function(){
-    $("#help-alert").removeClass("hidden");
-});
-
-$("#help-alert").click(function(){
-    $("#help-alert").addClass("hidden");
-});
-
-$('#game-over').click(function() {
-    $('#game-over').fadeOut();
-});
-
-function censor(a) {
-	let w = a.split(" ");
-	let res = w.map(b => "<span class='word'>" + b.slice(0,1) + b.replace(/[A-Za-zÀ-ÖØ-öø-ÿ]/ug,"_&nbsp;").replace(/^./,"").replace(/$/,"</span>"));
-	return res.join(" ");
-}
-
-$(document).ready(function () {
-	getDate();
-    // randomDate(); //testing
-   	$('.points').html(points);
+function mainFunction() {
 	getData(dataURL).then((data) => {
 		articles = data.items[0].articles;
 		// We need to filter out some popular pages, since they'll appear disproportionately often: https://en.wikipedia.org/wiki/Wikipedia:Popular_pages
-		let badTitles = ["Main_Page","Special:Search","Portal:Current_events","Wikipedia:Featured_pictures","2023","Deaths in 2023","Wikipedia","XHamster","HTTP cookie","JSON Web Token","Cookie (disambiguation)","Access token","Web scraping","XXX","Web performance","Bible","Cleopatra","Undefined","Search","Creative Commons Attribution","-","Wiki"],
+		let badTitles = ["Main_Page", "Special:Search", "Portal:Current_events", "Wikipedia:Featured_pictures", "2023", "Wikipedia", "XHamster", "HTTP cookie", "JSON Web Token", "Cookie (disambiguation)", "Access token", "Web scraping", "XXX", "Web performance", "Bible", "Cleopatra", "Undefined", "Search", "Creative Commons Attribution", "-", "Wiki"],
             badTitlesRegex = /(Special:|Wikipedia:|File:|Help:|User:|Deaths_in|.php|List_of|disambiguation|Category:)/gi;
 		for (var i=0;i<articles.length;i++) {
 			if(jQuery.inArray(articles[i].article, badTitles) == -1 && articles[i].article.match(badTitlesRegex) == null) {
@@ -220,5 +149,93 @@ $(document).ready(function () {
 				topTen.push(articleNamesNormalised[i].toLowerCase());
 			}
 		});
+	})
+	.catch(error => {
+		$("#error-box").removeClass("hidden");
 	});
+}
+
+function userSubmit() {
+    let guess = $('#guess').val();
+	let index = topTen.indexOf(guess.toLowerCase());
+	if (index !== null && index !== -1) { // user is correct
+		let correctAnswer = ".answer:eq(" + index + ")";
+		$(correctAnswer + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[index] + '">' + articleNamesNormalised[index] + '</a></strong>');
+        $(correctAnswer).css('background-color', 'var(--green)');
+        $(correctAnswer).css('background-image', 'url(' + images[index] + ')');
+        if (correctArray.indexOf(index) > -1) {
+            correctArray.splice(correctArray.indexOf(index), 1);
+        }
+        $('#guess').val("");
+        $('#guess').focus();
+		points++;
+   		$('.points').html(points);
+        //$('#correct').show().delay(1000).fadeOut();
+		if (correctArray.length == 0) {
+			gameOver();			
+		}
+	} else if (index == -1) { // user is incorrect
+        lives -= 1;
+        $("i:eq(" + lives + ")").removeClass("fa-solid");
+        $("i:eq(" + lives + ")").addClass("fa-regular");
+        $('#guess').val("");
+        $('#guess').focus();
+        let randomStatement = incorectWords[Math.floor(Math.random() * incorectWords.length)];
+        $('#incorrect h1').html(randomStatement);
+        $('#incorrect').show().delay(1000).fadeOut();
+    }
+    if (lives == 0) {
+        gameOver();
+    }
+}
+
+function gameOver() {
+    $('#guess').attr('disabled','disabled');
+    for (var i=0;i<correctArray.length;i++) {
+        let unanswered = ".answer:eq(" + correctArray[i] + ")";
+        $(unanswered).css('background-color', 'var(--red)');
+        $(unanswered).css('background-image', 'url(' + images[correctArray[i]] + ')');
+        $(unanswered + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[correctArray[i]] + '">' + articleNamesNormalised[correctArray[i]] + '</a></strong>');
+    }
+    let points = 10 - correctArray.length;
+    $('.points').html(points);
+    $('#emoji').html(emoji[points]);
+    $('#game-over').removeClass('hidden');
+}
+
+$("#guess").on('keyup', function (e) {
+    if ((e.key === 'Enter' || e.keyCode === 13) && $("#guess").val().length !== 0) {
+        userSubmit();
+    }
+});
+
+$("#help").click(function(){
+    $("#help-alert").removeClass("hidden");
+});
+
+$("#help-alert").click(function(){
+    $("#help-alert").addClass("hidden");
+});
+
+$("#error-box").click(function(){
+	$("#error-box").addClass("hidden");
+    randomDate();
+	mainFunction();
+});
+
+$('#game-over').click(function() {
+    $('#game-over').fadeOut();
+});
+
+function censor(a) {
+	let w = a.split(" ");
+	let res = w.map(b => "<span class='word'>" + b.slice(0,1) + b.replace(/[A-Za-zÀ-ÖØ-öø-ÿ]/ug,"_&nbsp;").replace(/^./,"").replace(/$/,"</span>"));
+	return res.join(" ");
+}
+
+$(document).ready(function () {
+	getDate();
+    // randomDate(); //testing
+   	$('.points').html(points);
+	mainFunction();
 });
