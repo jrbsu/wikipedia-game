@@ -2,6 +2,7 @@
 let articles = [],
 	articleNames = [],
 	articleNamesNormalised = [],
+	articleNamesLowercase = [],
 	viewCounts = [],
 	viewCountsCommas = [],
 	dataURL = "",
@@ -13,6 +14,7 @@ let articles = [],
 	topTen = [],
     correctArray = [0,1,2,3,4,5,6,7,8,9],
     lives = 3,
+	points = 0,
     incorectWords = ["Incorrect!","Wrong!","Nope!","Eh-er!","No!","No Sir!","Don't think so!","Pfft, nope!","Ah, so close!","Unlucky!","Ouch!","Noooo!","Oops!","Dang!","Cripes!","Can you believe it?!"];
 
 function getDate() {
@@ -74,10 +76,10 @@ function getSummaries() {
 
 function userSubmit() {
     let guess = $('#guess').val();
-	let index = topTen.indexOf(guess);
+	let index = topTen.indexOf(guess.toLowerCase());
 	if (index !== null && index !== -1) { // user is correct
 		let correctAnswer = ".answer:eq(" + index + ")";
-		$(correctAnswer + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[index] + '">' + guess + '</a></strong>');
+		$(correctAnswer + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[index] + '">' + articleNamesNormalised[index] + '</a></strong>');
         $(correctAnswer).css('background-color', 'var(--green)');
         $(correctAnswer).css('background-image', 'url(' + images[index] + ')');
         if (correctArray.indexOf(index) > -1) {
@@ -85,6 +87,8 @@ function userSubmit() {
         }
         $('#guess').val("");
         $('#guess').focus();
+		points++;
+   		$('.points').html(points);
         //$('#correct').show().delay(1000).fadeOut();
 		if (correctArray.length == 0) {
 			gameOver();			
@@ -113,7 +117,7 @@ function gameOver() {
         $(unanswered + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[correctArray[i]] + '">' + articleNamesNormalised[correctArray[i]] + '</a></strong>');
     }
     let points = 10 - correctArray.length;
-    $('#points').html(points);
+    $('.points').html(points);
     $('#emoji').html(emoji[points]);
     $('#game-over').removeClass('hidden');
 }
@@ -139,20 +143,23 @@ $('#game-over').click(function() {
 function censor(a) {
 	let w = a.split(" ");
 	let res = w.map(b => "<span class='word'>" + b.slice(0,1) + b.replace(/[A-Za-zÀ-ÖØ-öø-ÿ]/ug,"_&nbsp;").replace(/^./,"").replace(/$/,"</span>"));
-	return res.join("");
+	return res.join(" ");
 }
 
 $(document).ready(function () {
 	getDate();
     // randomDate(); //testing
+   	$('.points').html(points);
 	getData(dataURL).then((data) => {
 		articles = data.items[0].articles;
-		let badTitles = ["Main_Page","Special:Search","Portal:Current_events","Wikipedia:Featured_pictures","2023","Deaths in 2023","Wikipedia","XHamster","HTTP cookie","JSON Web Token","Cookie (disambiguation)","Access token","Web scraping","XXX","Web performance","Bible","Cleopatra","Undefined","Search","Creative Commons Attribution"],
+		// We need to filter out some popular pages, since they'll appear disproportionately often: https://en.wikipedia.org/wiki/Wikipedia:Popular_pages
+		let badTitles = ["Main_Page","Special:Search","Portal:Current_events","Wikipedia:Featured_pictures","2023","Deaths in 2023","Wikipedia","XHamster","HTTP cookie","JSON Web Token","Cookie (disambiguation)","Access token","Web scraping","XXX","Web performance","Bible","Cleopatra","Undefined","Search","Creative Commons Attribution","-","Wiki"],
             badTitlesRegex = /(Special:|Wikipedia:|File:|Help:|User:|Deaths_in|.php|List_of|disambiguation|Category:)/gi;
 		for (var i=0;i<articles.length;i++) {
 			if(jQuery.inArray(articles[i].article, badTitles) == -1 && articles[i].article.match(badTitlesRegex) == null) {
 				articleNames.push(articles[i].article.replace(/\"/g,"\""));
 				articleNamesNormalised.push(articles[i].article.replace(/_/g," "));
+				articleNamesLowercase.push(articles[i].article.replace(/_/g," ").toLowerCase());
 				let pv = articles[i].views;
 				viewCounts.push(articles[i].views);
 				viewCountsCommas.push(articles[i].views.toLocaleString());
@@ -210,7 +217,7 @@ $(document).ready(function () {
 				    $('.summary-text:eq(' + i + ')').html("<em>no description :(</em>")
                 }
 				$('.pageviews:eq(' + i + ')').html("(" + viewCountsCommas[i] + " pageviews)");
-				topTen.push(articleNamesNormalised[i]);
+				topTen.push(articleNamesNormalised[i].toLowerCase());
 			}
 		});
 	});
