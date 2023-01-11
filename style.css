@@ -11,13 +11,12 @@ body {
 	margin: 0px;
     padding: 0px;
 	font-family: "Inter", sans-serif;
-	width: 100vw;
 }
 
 #wrap {
 	display: flex;
 	position: relative;
-	overflow-x: hidden;
+	width: 100vw;
 }
 
 
@@ -31,13 +30,17 @@ body {
 }
 
 .answer {
-	max-width: 500px;
 	margin-bottom: 1em;
 	padding: 1em 2em;
 	background: #222;
     background-position: center;
     background-size: cover;
     background-blend-mode: multiply;
+}
+
+.item-text {
+	margin: 5px 0;
+    line-height: 1.5;
 }
 
 ul {
@@ -176,4 +179,10 @@ button {
 	button {
 		font-size: 1em;
 	}
+}
+
+#score {
+	color: white;
+	font-weight: 700;
+	font-size: 0.7em;
 }
