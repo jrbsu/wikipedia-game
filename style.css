@@ -31,6 +31,7 @@ body {
 }
 
 .answer {
+	max-width: 500px;
 	margin-bottom: 1em;
 	padding: 1em 2em;
 	background: #222;
