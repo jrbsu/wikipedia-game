@@ -15,22 +15,24 @@ let articles = [],
     correctArray = [0,1,2,3,4,5,6,7,8,9],
     lives = 3,
 	points = 0,
+	timerInput = "",
     incorectWords = ["Incorrect!","Wrong!","Nope!","Eh-er!","No!","No Sir!","Don't think so!","Pfft, nope!","Ah, so close!","Unlucky!","Ouch!","Noooo!","Oops!","Dang!","Cripes!","Can you believe it?!"];
 
 function getDate() {
 	let d = new Date(),
 		month = d.getMonth()+1,
 		day = d.getDate()-1,
-		dateOutput = new Date(d.getFullYear(),month-1,day,0,0,0),
 		output = d.getFullYear() + '/' + (month<10 ? '0' : '') + month + '/' + (day<10 ? '0' : '') + day,
+		dateOutput = new Date(d.getFullYear(),month-1,day,0,0,0),
 		intl = new Intl.DateTimeFormat("en", {month: "long"}).format(dateOutput),
 		titleOutput = day + " " + intl + " " + d.getFullYear();
+	timerInput = output;
 	dataURL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia.org/all-access/" + output;
 	$('#title').html("Wikipedia guessing game:<br/>" + titleOutput);
 }
 
 function randomDate() {
-    let ys = [2016,2017,2018,2019,2020,2021,2022],
+    let ys = [2015,2016,2017,2018,2019,2020,2021,2022],
         y = ys[Math.floor(Math.random() * ys.length)],
         m = Math.floor(Math.random() * 12) + 1,
         d = Math.floor(Math.random() * 30) + 1;
@@ -80,6 +82,33 @@ function getSummaries() {
 
 function mainFunction() {
 	getData(dataURL).then((data) => {
+		// initialise for replay
+		$("#loading").show();
+		$(".list").hide();
+		
+		articles = [];
+		articleNames = [];
+		articleNamesNormalised = [];
+		articleNamesLowercase = [];
+		viewCounts = [];
+		viewCountsCommas = [];
+		dataURL = "";
+		viewsURL = "";
+		descURL = "";
+		summaries = ["","","","","","","","","",""];
+		images = ["","","","","","","","","",""];
+		topTen = [];
+		lives = 3;
+		points = 0;
+		$(".answer").each(function(){
+			$(this).css("background-color","#222")
+				.css("background-image","none");
+		});
+		$('#guess').attr('disabled',false);
+        $("i").removeClass("fa-regular");
+        $("i").addClass("fa-solid");
+   		$('.points').html(points);
+		
 		articles = data.items[0].articles;
 		// We need to filter out some popular pages, since they'll appear disproportionately often: https://en.wikipedia.org/wiki/Wikipedia:Popular_pages
 		let badTitles = ["Main_Page", "Special:Search", "Portal:Current_events", "Wikipedia:Featured_pictures", "2023", "Wikipedia", "XHamster", "HTTP cookie", "JSON Web Token", "Cookie (disambiguation)", "Access token", "Web scraping", "XXX", "Web performance", "Bible", "Cleopatra", "Undefined", "Search", "Creative Commons Attribution", "-", "Wiki"],
@@ -148,6 +177,11 @@ function mainFunction() {
 				$('.pageviews:eq(' + i + ')').html("(" + viewCountsCommas[i] + " pageviews)");
 				topTen.push(articleNamesNormalised[i].toLowerCase());
 			}
+			
+			$(".list").fadeIn();
+			$("#loading").hide();
+		}).catch(error => {
+			$("#error-box").removeClass("hidden");
 		});
 	})
 	.catch(error => {
@@ -209,6 +243,33 @@ $("#guess").on('keyup', function (e) {
     }
 });
 
+
+function newDayTimer() {
+	let tomorrowDate = new Date(),
+	tomorrowMonth = tomorrowDate.getMonth()+1,
+	tomorrowDay = tomorrowDate.getDate()+1,
+	fullDate = tomorrowDate.getFullYear() + '/' + (tomorrowMonth<10 ? '0' : '') + tomorrowMonth + '/' + (tomorrowDay<10 ? '0' : '') + tomorrowDay;
+	
+	const second = 1000,
+		  minute = second * 60,
+		  hour = minute * 60,
+		  day = hour * 24;
+	
+	const countDown = new Date(fullDate).getTime();
+	const x = setInterval(function() {
+		const now = new Date().getTime(),
+			  distance = countDown - now;
+		
+		let hoursOut = Math.floor((distance % (day)) / (hour)),
+			minutesOut = Math.floor((distance % (hour)) / (minute)),
+			secondsOut = Math.floor((distance % (minute)) / second);
+				
+		$("#hours").html((hoursOut<10 ? '0' : '') + hoursOut);
+		$("#minutes").html((minutesOut<10 ? '0' : '') + minutesOut);
+		$("#seconds").html((secondsOut<10 ? '0' : '') + secondsOut);
+      }, 0)
+}
+
 $("#help").click(function(){
     $("#help-alert").removeClass("hidden");
 });
@@ -223,8 +284,14 @@ $("#error-box").click(function(){
 	mainFunction();
 });
 
-$('#game-over').click(function() {
-    $('#game-over').fadeOut();
+$("#review").click(function(){
+	$("#game-over").addClass("hidden");
+});
+
+$("#random").click(function(){
+	$("#game-over").addClass("hidden");
+    randomDate();
+	mainFunction();
 });
 
 function censor(a) {
@@ -236,6 +303,6 @@ function censor(a) {
 $(document).ready(function () {
 	getDate();
     // randomDate(); //testing
-   	$('.points').html(points);
 	mainFunction();
+	newDayTimer();
 });
