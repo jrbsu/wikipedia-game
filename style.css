@@ -6,16 +6,21 @@
 }
 
 body {
-	display: flex;
 	place-items: center;
 	background: #003;
 	margin: 0px;
-	padding: 0px;
+    padding: 0px;
 	font-family: "Inter", sans-serif;
+}
+
+#wrap {
+	display: flex;
+	position: relative;
 	overflow-x: hidden;
 }
 
-#page-wrap {
+
+#answers-wrap {
 	width: 600px;
 	background: #111;
 	color: white;
@@ -28,9 +33,9 @@ body {
 	margin-bottom: 1em;
 	padding: 1em 2em;
 	background: #222;
-	background-position: center;
-	background-size: cover;
-	background-blend-mode: multiply;
+    background-position: center;
+    background-size: cover;
+    background-blend-mode: multiply;
 }
 
 ul {
@@ -46,11 +51,11 @@ h1 {
 }
 
 a {
-	color: white;
+    color: white;
 }
 
 a:hover {
-	text-decoration: none;
+    text-decoration: none;
 }
 
 input {
@@ -163,7 +168,7 @@ button {
 	}
 	
 	#lives {
-		font-size: 1.5em;
+		font-size: 2em;
 	}
 	
 	button {
