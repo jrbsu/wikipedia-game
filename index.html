@@ -19,11 +19,6 @@
 				<h1>Incorrect!</h1>
 			</div>
 		</div>
-		<div id="correct" class="alert-box hidden">
-			<div id="incorrect-text" class="alert-text">
-				<h1>Correct!</h1>
-			</div>
-		</div>
 		<div id="error-box" class="alert-box hidden">
 			<div id="error-text" class="alert-text">
 				<h1>Sorry!</h1>
@@ -42,22 +37,21 @@
 			</div>
 		</div>
 		<div id="game-over" class="alert-box hidden">
-			<div id="incorrect-text" class="alert-text">
-				<h1 id="game-over-text">Game over!</h1>
-				<p>You scored <span class="points"></span>/10! <span id="emoji"></span></p>
-				<div id="hearts-grid">
+			<div id="game-over-text" class="alert-text">
+				<h1>Game over!</h1>
+				<p id="score-text">You scored <span class="points"></span>/10! <span id="emoji"></span></p>
+				<div id="game-over-grid">
 					<div id="review-box" class="button-box">
-						<button id="review">
+						<button id="review" class="game-over-button">
 							Review
 						</button>
 					</div>
 					<div id="timer-text">
-						<div id="timer"><span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span></div>
-						<div>until next game</div>
+						Next game in <span id="timer"><span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span></span>
 					</div>
 					<div id="random-box">
-						<button id="random" class="button-box">
-							Play a random day
+						<button id="random" class="game-over-button">
+							Try a random day
 						</button>
 					</div>
 				</div>
