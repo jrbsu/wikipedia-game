@@ -264,9 +264,9 @@ function newDayTimer() {
 			minutesOut = Math.floor((distance % (hour)) / (minute)),
 			secondsOut = Math.floor((distance % (minute)) / second);
 				
-		$("#hours").html((hoursOut<10 ? '0' : '') + hoursOut);
-		$("#minutes").html((minutesOut<10 ? '0' : '') + minutesOut);
-		$("#seconds").html((secondsOut<10 ? '0' : '') + secondsOut);
+		$("#hours").text((hoursOut<10 ? '0' : '') + hoursOut);
+		$("#minutes").text((minutesOut<10 ? '0' : '') + minutesOut);
+		$("#seconds").text((secondsOut<10 ? '0' : '') + secondsOut);
       }, 0)
 }
 
