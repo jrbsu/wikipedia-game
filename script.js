@@ -104,6 +104,9 @@ function mainFunction() {
 			$(this).css("background-color","#222")
 				.css("background-image","none");
 		});
+		$("#guess-list > option").each(function(){
+			$(this).remove();
+		});
 		$('#guess').attr('disabled',false);
         $("i").removeClass("fa-regular");
         $("i").addClass("fa-solid");
