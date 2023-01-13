@@ -6,9 +6,16 @@
     --error: #ADEFFF;
 }
 
+html {
+	background-color: var(--dark-blue);
+}
+
 body {
 	place-items: center;
-	background: #003;
+	background-color: var(--dark-blue);
+	background-image: url("wp15bg.png");
+	background-blend-mode: soft-light;
+	background-repeat: repeat;
 	margin: 0px;
     padding: 0px;
 	font-family: "Inter", sans-serif;
