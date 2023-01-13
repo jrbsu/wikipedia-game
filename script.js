@@ -198,7 +198,7 @@ function userSubmit() {
 	let index = topTen.indexOf(guess.toLowerCase());
 	if (index !== null && index !== -1) { // user is correct
 		let correctAnswer = ".answer:eq(" + index + ")";
-		$(correctAnswer + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[index] + '">' + articleNamesNormalised[index] + '</a></strong>');
+		$(correctAnswer + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[index] + '" target="_blank">' + articleNamesNormalised[index] + '</a></strong>');
         $(correctAnswer).css('background-color', 'var(--green)');
         $(correctAnswer).css('background-image', 'url(' + images[index] + ')');
         if (correctArray.indexOf(index) > -1) {
@@ -233,7 +233,7 @@ function gameOver() {
         let unanswered = ".answer:eq(" + correctArray[i] + ")";
         $(unanswered).css('background-color', 'var(--red)');
         $(unanswered).css('background-image', 'url(' + images[correctArray[i]] + ')');
-        $(unanswered + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[correctArray[i]] + '">' + articleNamesNormalised[correctArray[i]] + '</a></strong>');
+        $(unanswered + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[correctArray[i]] + '" target="_blank">' + articleNamesNormalised[correctArray[i]] + '</a></strong>');
     }
     let points = 10 - correctArray.length;
     $('.points').html(points);
