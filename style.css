@@ -14,7 +14,6 @@ body {
 	place-items: center;
 	background-color: var(--dark-blue);
 	background-image: url("wp15bg.png");
-	background-blend-mode: soft-light;
 	background-repeat: repeat;
 	margin: 0px;
     padding: 0px;
@@ -40,12 +39,12 @@ body {
 .answer {
 	margin-bottom: 1em;
 	padding: 1em 2em;
-	background: #222;
+	background-color: #222;
     background-position: center;
     background-size: cover;
     background-blend-mode: multiply;
 	border-radius: 20px;
-	border: 0.5px solid #333;
+	border: 1px solid #333;
 }
 
 .item-text {
