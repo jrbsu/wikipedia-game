@@ -18,6 +18,10 @@ html {
   margin: 0;
 }
 
+@font-face {
+  font-family: "Inter";
+  src: url("../meta/fonts/Inter.ttf");
+}
 body {
   place-items: center;
   /* background: #003; */
