@@ -320,6 +320,9 @@ $("#review").click(function(){
 });
 
 $("#random").click(function(){
+  $( "#give-up" ).addClass( GIVE_UP_CLASS )
+  $( "#give-up" ).removeClass( NEW_GAME_CLASS )
+  $( "#give-up" ).text( GIVE_UP_TEXT )
 	randomGame()
 });
 
