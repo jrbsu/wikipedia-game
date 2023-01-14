@@ -21,11 +21,16 @@ html {
   margin: 0;
 }
 
+@font-face {
+  font-family: "Inter";
+  src: url( "../meta/fonts/Inter.ttf" );
+}
+
 body {
   place-items: center;
   /* background: #003; */
   background-color: rgb(9, 10, 48);
-  font-family: "Inter", sans-serif;
+  font-family: "Inter", monospace;
   transition: color 200ms;
   height: 100vh;
 }
