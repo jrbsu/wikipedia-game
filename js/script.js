@@ -1,22 +1,5 @@
 "use strict";
-let articles = [],
-	articleNames = [],
-	articleNamesNormalised = [],
-	articleNamesLowercase = [],
-	viewCounts = [],
-	viewCountsCommas = [],
-	dataURL = "",
-	viewsURL = "",
-	descURL = "",
-	summaries = ["","","","","","","","","",""],
-	images = ["","","","","","","","","",""],
-	emoji = ["😱","😭","😬","🥱","🙃","😤","🤤","😎","🤩","🤯"],
-	topTen = [],
-    correctArray = [0,1,2,3,4,5,6,7,8,9],
-    lives = 3,
-	points = 0,
-	timerInput = "",
-    incorectWords = ["Incorrect!","Wrong!","Nope!","Eh-er!","No!","No Sir!","Don't think so!","Pfft, nope!","Ah, so close!","Unlucky!","Ouch!","Noooo!","Oops!","Dang!","Cripes!","Can you believe it?!"];
+
 
 function getDate() {
 	let d = new Date(),
@@ -85,7 +68,10 @@ function mainFunction() {
 		// initialise for replay
 		$("#loading").show();
 		$(".list").hide();
+
+    $( "#give-up" ).text( GIVE_UP_TEXT )
 		
+    GAME_OVER = false;
 		articles = [];
 		articleNames = [];
 		articleNamesNormalised = [];
@@ -105,18 +91,14 @@ function mainFunction() {
 			$(this).css("background-color","#222")
 				.css("background-image","none");
 		});
-		$("#guess-list > option").each(function(){
-			$(this).remove();
-		});
+
 		$('#guess').attr('disabled',false);
         $("i").removeClass("fa-regular");
         $("i").addClass("fa-solid");
    		$('.points').html(points);
 		
 		articles = data.items[0].articles;
-		// We need to filter out some popular pages, since they'll appear disproportionately often: https://en.wikipedia.org/wiki/Wikipedia:Popular_pages
-		let badTitles = ["Main_Page", "Special:Search", "Portal:Current_events", "Wikipedia:Featured_pictures", "2023", "Wikipedia", "XHamster", "HTTP cookie", "JSON Web Token", "Cookie (disambiguation)", "Access token", "Web scraping", "XXX", "Web performance", "Bible", "Cleopatra", "Undefined", "Search", "Creative Commons Attribution", "-", "Wiki"],
-            badTitlesRegex = /(Special:|Wikipedia:|File:|Help:|User:|Deaths_in|.php|List_of|disambiguation|Category:)/gi;
+		
 		for (var i=0;i<articles.length;i++) {
 			if(jQuery.inArray(articles[i].article, badTitles) == -1 && articles[i].article.match(badTitlesRegex) == null) {
 				articleNames.push(articles[i].article.replace(/\"/g,"\""));
@@ -127,7 +109,7 @@ function mainFunction() {
 				viewCountsCommas.push(articles[i].views.toLocaleString());
 			}
 		}
-		let articleNamesSorted = [...articleNamesNormalised];
+		articleNamesSorted = [...articleNamesNormalised];
 		
 		let titleString = "";
 		for(var i=0;i<10;i++) {
@@ -152,11 +134,6 @@ function mainFunction() {
             }
             
             articleNamesSorted.sort();
-		
-            for (var i=0;i<articleNamesSorted.length;i++) {
-                let option = `<option value="${articleNamesSorted[i].replace(/\"/g, "&quot;")}">`;
-                $("#guess-list").append(option);
-            }
             
 			for(var i=0;i<10;i++) { // load in the article names, summaries, imgs (for the top ten only)
 				let index = articleNamesNormalised.indexOf(summariesData[i].title);
@@ -178,9 +155,11 @@ function mainFunction() {
                 } else {
 				    $('.summary-text:eq(' + i + ')').html("<em>no description :(</em>")
                 }
-				$('.pageviews:eq(' + i + ')').html("(" + viewCountsCommas[i] + " pageviews)");
+				$('.pageviews:eq(' + i + ')').html( viewCountsCommas[i] + " pageviews");
 				topTen.push(articleNamesNormalised[i].toLowerCase());
 			}
+
+      populateGuessList()
 			
 			$(".list").fadeIn();
 			$("#loading").hide();
@@ -194,46 +173,68 @@ function mainFunction() {
 }
 
 function userSubmit() {
-    let guess = $('#guess').val();
+  let guess = $('#guess').val();
 	let index = topTen.indexOf(guess.toLowerCase());
+
 	if (index !== null && index !== -1) { // user is correct
+    if ( alreadyAnswered.includes( index ) ) return
+    alreadyAnswered.push( index )
+
 		let correctAnswer = ".answer:eq(" + index + ")";
-		$(correctAnswer + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[index] + '" target="_blank">' + articleNamesNormalised[index] + '</a></strong>');
+		$(correctAnswer + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[index] + '">' + articleNamesNormalised[index] + '</a></strong>');
         $(correctAnswer).css('background-color', 'var(--green)');
         $(correctAnswer).css('background-image', 'url(' + images[index] + ')');
         if (correctArray.indexOf(index) > -1) {
             correctArray.splice(correctArray.indexOf(index), 1);
         }
         $('#guess').val("");
+        
         $('#guess').focus();
 		points++;
    		$('.points').html(points);
+
         //$('#correct').show().delay(1000).fadeOut();
-		if (correctArray.length == 0) {
-			gameOver();			
+		if (correctArray.length === 0) {
+			return gameOver();			
 		}
-	} else if (index == -1) { // user is incorrect
-        lives -= 1;
-        $("i:eq(" + lives + ")").removeClass("fa-solid");
-        $("i:eq(" + lives + ")").addClass("fa-regular");
-        $('#guess').val("");
-        $('#guess').focus();
-        let randomStatement = incorectWords[Math.floor(Math.random() * incorectWords.length)];
-        $('#incorrect h1').html(randomStatement);
-        $('#incorrect').show().delay(1000).fadeOut();
-    }
-    if (lives == 0) {
-        gameOver();
-    }
+
+    let randomStatement = correctWords[Math.floor(Math.random() * incorectWords.length)];
+    $('#correct-text').html(randomStatement);
+    $('#correct-modal').css( { display: "flex" } ).delay( ALERT_DURATION ).fadeOut();
+    $( "#correct-modal > .modal-content" ).addClass( "anim_float" ).delay( ALERT_DURATION ).queue( () => { $(  "#correct > .modal-content" ).removeClass( "anim_float" ) } )
+	} 
+  // user is incorrect
+  else if (index == -1) {
+    lives -= 1;
+    $("i:eq(" + lives + ")").removeClass("fa-solid");
+    $("i:eq(" + lives + ")").addClass("fa-regular");
+    $('#guess').val("");
+    $('#guess').focus();
+    let randomStatement = incorectWords[Math.floor(Math.random() * incorectWords.length)];
+    $('#incorrect-text').html(randomStatement);
+    $('#incorrect').css( { display: "flex" } ).delay( ALERT_DURATION ).fadeOut();
+    $( "#incorrect > .modal-content" ).addClass( "anim_screen_shake" ).delay( ALERT_DURATION ).queue( () => { $(  "#incorrect > .modal-content" ).removeClass( "anim_screen_shake" ) } )
+  }
+  if (lives == 0) {
+    return gameOver();
+  }
+
+  $('#guess').val("");
+  populateGuessList()
 }
 
 function gameOver() {
+    if ( GAME_OVER )
+      return
+    
+    GAME_OVER = true
+
     $('#guess').attr('disabled','disabled');
     for (var i=0;i<correctArray.length;i++) {
         let unanswered = ".answer:eq(" + correctArray[i] + ")";
         $(unanswered).css('background-color', 'var(--red)');
         $(unanswered).css('background-image', 'url(' + images[correctArray[i]] + ')');
-        $(unanswered + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[correctArray[i]] + '" target="_blank">' + articleNamesNormalised[correctArray[i]] + '</a></strong>');
+        $(unanswered + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[correctArray[i]] + '">' + articleNamesNormalised[correctArray[i]] + '</a></strong>');
     }
     let points = 10 - correctArray.length;
     $('.points').html(points);
@@ -241,11 +242,38 @@ function gameOver() {
     $('#game-over').removeClass('hidden');
 }
 
-$("#guess").on('keyup', function (e) {
-    if ((e.key === 'Enter' || e.keyCode === 13) && $("#guess").val().length !== 0) {
-        userSubmit();
-    }
+$("#guess").on('keydown', function (e) {
+  if ((e.key === 'Enter' || e.keyCode === 13) && $("#guess").val().length !== 0) {
+    // "quick guess" the first choice in the guess list (if its the only one there) 
+    if ( $('#guess-list').children().length === 1 )
+      $('#guess').val( $('#guess-list').children().first().val() )
+        
+    userSubmit();
+  }
 });
+
+$( "#guess" ).on( "submit", e => {
+  userSubmit()
+} )
+
+$( "#give-up" ).click( e => {
+  if ( GAME_OVER )
+  {
+    $( "#give-up" ).addClass( GIVE_UP_CLASS )
+    $( "#give-up" ).removeClass( NEW_GAME_CLASS )
+    
+    $( "#give-up" ).text( GIVE_UP_TEXT )
+    randomGame()
+  }
+  else
+  {
+    $( "#give-up" ).addClass( NEW_GAME_CLASS )
+    $( "#give-up" ).removeClass( GIVE_UP_CLASS )
+    $( "#give-up" ).text( NEW_GAME_TEXT )
+    gameOver()
+  }
+}) 
+
 
 
 function newDayTimer() {
@@ -275,27 +303,24 @@ function newDayTimer() {
 }
 
 $("#help").click(function(){
-    $("#help-alert").removeClass("hidden");
+    $("#help-modal").removeClass("hidden");
 });
 
-$("#help-alert").click(function(){
-    $("#help-alert").addClass("hidden");
+$("#help-close").click(function(){
+    $("#help-modal").addClass("hidden");
 });
 
-$("#error-box").click(function(){
-	$("#error-box").addClass("hidden");
-    randomDate();
-	mainFunction();
-});
+$( "#error-play" ).click( () => {
+  $( "#error" ).addClass( "hidden" )
+  randomGame()
+})
 
 $("#review").click(function(){
 	$("#game-over").addClass("hidden");
 });
 
 $("#random").click(function(){
-	$("#game-over").addClass("hidden");
-    randomDate();
-	mainFunction();
+	randomGame()
 });
 
 function censor(a) {
@@ -306,7 +331,46 @@ function censor(a) {
 
 $(document).ready(function () {
 	getDate();
-    // randomDate(); //testing
+  // randomDate(); // testing
 	mainFunction();
 	newDayTimer();
 });
+
+$( "#guess" ).on( "input", e => { populateGuessList( e.target.value.toLowerCase() ) } )
+
+
+function populateGuessList( query = "" )
+{
+  $( "#guess-list" ).empty()
+
+  for ( let title of articleNamesSorted )
+  {
+    title = title.toLowerCase()
+
+    if ( $( "#guess-list" ).children().length >= MAX_GUESS_LIST_OPTIONS )
+      break
+
+    if ( query === "" || title.includes( query ) )
+      $( "#guess-list" ).append( createGuessListOption( title ) )
+  }
+
+
+}
+
+function createGuessListOption( content )
+{
+  let opt = document.createElement( "option" )
+  opt.value = content
+  opt.addEventListener( "keydown", e => {
+    e.preventDefault()
+    console.log( "poke" )
+  } )
+  return opt
+}
+
+function randomGame()
+{
+  $("#game-over").addClass("hidden");
+  randomDate();
+	mainFunction();
+}

@@ -3,67 +3,85 @@
 <head>
     <meta charset="utf-8" />
 	<script src="https://kit.fontawesome.com/e8b767ad55.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
 	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <title>Guess the top ten Wikipedia articles</title>
+    <title>Guess The Top Ten Wikipedia Articles</title>
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="HandheldFriendly" content="true">
 	<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
-	<script type="text/javascript" src="script.js" defer></script>
+
+	<script type="text/javascript" src="./js/definitions.js" defer></script>
+	<script type="text/javascript" src="./js/script.js"     defer></script>
 </head>
 <body>
 	<div id="wrap">
-		<div id="incorrect" class="alert-box hidden">
-			<div id="incorrect-text" class="alert-text">
-				<h1>Incorrect!</h1>
+
+    <div id="correct-modal" class="modal hidden">
+      <div class="modal-content">
+        <p class="heading" id="correct-text">Correct :)</p>
+      </div>
+    </div>
+
+    <div id="incorrect" class="modal hidden">
+      <div class="modal-content">
+        <p class="heading" id="incorrect-text">Incorrect!</p>
+      </div>
+    </div>
+
+    <div id="error" class="modal hidden">
+			<div class="modal-content">
+				<p class="heading">Sorry :(</p>
+				<p>
+          There was an issue loading the data for today's game...
+        </p>
+				<p>
+          Most likely Wikipedia's API hasn't updated with yesterday's data.
+        </p>
+        <button id="error-play" class="modal-button">Play Random Day Instead</button>
 			</div>
 		</div>
-		<div id="error-box" class="alert-box hidden">
-			<div id="error-text" class="alert-text">
-				<h1>Sorry!</h1>
-				<p>There was an issue loading the data for today's game. (Likely Wikipedia's API hasn't yet updated with yesterday's data.)</p>
-				<p>Click anywhere in this box to play a random date instead.</p>
-				<button id="play"></button>
+
+		<div id="help-modal" class="modal hidden">
+			<div class="modal-content">
+				<p class="heading">Help</p>
+				<p>Each of the clues refers to one of the <span class="highlight">top read Wikipedia articles</span>. Each has a description, initials, and the number of pageviews the article received on that day. To play, begin typing a guess in the input box at the top</p>
+				<p>The game will filter out perennial entries in the top ten, such as technical pages used by bots and ever-popular articles (e.g., "Deaths in [year]", "XXX", etc)</p>
+				<p>As you guess, <span class="highlight">tthe input will filter through the top 1000 most-read articles of the day</span>. You can use this to guide your guesses in the right direction. Good</p>
+        <button id="help-close" class="modal-button">Okay :)</button>
 			</div>
 		</div>
-		<div id="help-alert" class="alert-box hidden">
-			<div id="help-text" class="alert-text">
-				<h1>Help</h1>
-				<p>Each of the ten clues refers to one of the top ten most-read Wikipedia articles. Each has a description, initials, and the number of pageviews the article received on that day. To play, begin typing a guess in the input box at the top.</p>
-				<p>The game will filter out perennial entries in the top ten, such as technical pages used by bots and always-popular articles (e.g., "Deaths in [year]", "XXX", etc.)</p>
-				<p>The input box is pre-filled with the 1000 most-read articles of the day. You can use this to guide your guesses in the right direction.</p>
-				<p>Click on this box to dismiss it.</p>
-			</div>
-		</div>
-		<div id="game-over" class="alert-box hidden">
-			<div id="game-over-text" class="alert-text">
-				<h1>Game over!</h1>
+
+		<div id="game-over" class="modal hidden">
+			<div id="game-over-text" class="modal-content">
+				<p class="heading">Game over!</p>
 				<p id="score-text">You scored <span class="points"></span>/10! <span id="emoji"></span></p>
 				<div id="game-over-grid">
-					<div id="review-box" class="button-box">
-						<button id="review" class="game-over-button">
+					<div id="review-box">
+						<button id="review" class="game-over-button modal-button">
 							Review
 						</button>
 					</div>
-					<div id="timer-text">
-						Next game in <span id="timer"><span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span></span>
-					</div>
 					<div id="random-box">
-						<button id="random" class="game-over-button">
-							Try a random day
+						<button id="random" class="game-over-button modal-button">
+							Try a Random Day
 						</button>
 					</div>
-				</div>
+        </div>
+
+        <div id="timer-text">
+          Next game in... <span id="timer"><span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span></span>
+        </div>
 			</div>
 		</div>
+
 		<div id="answers-wrap">
 			<div id="header-wrap">
 				<h1 id="title">Wikipedia guessing game</h1>
 				<input type="text" list="guess-list" id="guess" name="guess" placeholder="Enter your guess here!">
-				<div id="hearts-grid">
-					<div id="help-box" class="button-box">
-						<button id="help">
+				<div id="hearts-grid" class="button-box-container">
+					<div id="help-box">
+						<button id="help" class="button-box help-box">
 							Help
 						</button>
 					</div>
@@ -72,8 +90,8 @@
 						<div id="score" class=""><span class="points"></span>/10</div>
 					</div>
 					<div id="give-up-box">
-						<button id="give-up" onclick="gameOver()">
-							Give up
+						<button id="give-up" class="button-box give-up-box">
+							Resign
 						</button>
 					</div>
 				</div>
