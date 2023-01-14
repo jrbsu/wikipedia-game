@@ -23,7 +23,20 @@ html {
 
 @font-face {
   font-family: "Inter";
-  src: url( "../meta/fonts/Inter.ttf" );
+  src: url("../meta/fonts/Inter.ttf");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("../meta/fonts/Inter-ExtraBold.ttf");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("../meta/fonts/Inter-Black.ttf");
+  font-weight: 900;
 }
 
 body {

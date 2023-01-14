@@ -25,7 +25,7 @@ const ALERT_DURATION = 500;
 
 // We need to filter out some popular pages, since they'll appear disproportionately often: https://en.wikipedia.org/wiki/Wikipedia:Popular_pages
 const badTitles = [
-  "Main_Page",
+ "Main_Page",
  "Special:Search",
  "Portal:Current_events",
  "Wikipedia:Featured_pictures",
@@ -46,7 +46,6 @@ const badTitles = [
  "Creative Commons Attribution",
  "-",
  "Wiki"
-
 ]
 
 const badTitlesRegex = /(Special:|Wikipedia:|File:|Help:|User:|Deaths_in|.php|List_of|disambiguation|Category:)/gi;

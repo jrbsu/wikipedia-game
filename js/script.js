@@ -356,8 +356,6 @@ function populateGuessList( query = "" )
     if ( query === "" || title.includes( query ) )
       $( "#guess-list" ).append( createGuessListOption( title ) )
   }
-
-
 }
 
 function createGuessListOption( content )
