@@ -12,12 +12,13 @@ function getDate() {
     }).format(dateOutput),
     titleOutput = day + " " + intl + " " + d.getFullYear();
   timerInput = output;
-  dataURL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia.org/all-access/" + output;
+  //dataURL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia.org/all-access/" + output;
+  dataURL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia.org/all-access/2016/07/09";
   $('#title').html("Wikipedia guessing game:<br/>" + titleOutput);
 }
 
 function randomDate() {
-  let ys = [2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022],
+  let ys = [2016, 2017, 2018, 2019, 2020, 2021, 2022],
     y = ys[Math.floor(Math.random() * ys.length)],
     m = Math.floor(Math.random() * 12) + 1,
     d = Math.floor(Math.random() * 30) + 1;
@@ -159,7 +160,6 @@ function mainFunction() {
             }
           }
         }
-        console.log(names);
         // load this onto page
         for (var i = 0; i < 10; i++) {
           $('.answer-text:eq(' + i + ')').html(censor(articleNamesNormalised[i]));
@@ -228,12 +228,8 @@ function userSubmit() {
     for (var i = 0; i < 10; i++) {
       if (names[i] == guess) {
         namesArray.push(guess);
+		userCorrect(i);
       }
-	console.log(names, namesArray);
-    }
-    for (var i = 0; i < namesArray.length; i++) {
-      let a = names.indexOf(namesArray[i]);
-      userCorrect(a);
     }
   } else {
     // user is incorrect
