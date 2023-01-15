@@ -4,11 +4,13 @@
     <meta charset="utf-8" />
 	<script src="https://kit.fontawesome.com/e8b767ad55.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <link rel="stylesheet" type="text/css" href="./css/jquery-ui.css">
     <title>Guess The Top Ten Wikipedia Articles</title>
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="HandheldFriendly" content="true">
-	<script src="https://code.jquery.com/jquery-3.6.3.js" integrity="sha256-nQLuAZGRRcILA+6dMBOvcRh5Pe310sBpanc6+QBmyVM=" crossorigin="anonymous"></script>
+	<script src="js/jquery-3.6.3.js"></script>
+	<script src="js/jquery-ui.js"></script>
 
 	<script type="text/javascript" src="./js/definitions.js" defer></script>
 	<script type="text/javascript" src="./js/script.js"     defer></script>
@@ -74,7 +76,9 @@
 		<div id="answers-wrap">
 			<div id="header-wrap">
 				<h1 id="title">Wikipedia guessing game</h1>
-				<input type="text" list="guess-list" id="guess" name="guess" placeholder="Enter your guess here!">
+				<input type="text" list="guess-list" id="guess" name="guess" placeholder="Enter your guess here!" autocomplete="off" size="50">
+				<!-- <datalist id="guess-list">
+				</datalist> -->
 				<div id="hearts-grid" class="button-box-container">
 					<div id="help-box">
 						<button id="help" class="button-box help-box">
@@ -91,8 +95,6 @@
 						</button>
 					</div>
 				</div>
-				<datalist id="guess-list">
-				</datalist>
 			</div>
 			<div id="loading">
 				<div class="lds-ring"><div></div><div></div><div></div><div></div></div>

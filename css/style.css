@@ -23,16 +23,19 @@ html {
   src: url("../meta/fonts/Inter.ttf");
   font-weight: 400;
 }
+
 @font-face {
   font-family: "Inter";
   src: url("../meta/fonts/Inter-ExtraBold.ttf");
   font-weight: 700;
 }
+
 @font-face {
   font-family: "Inter";
   src: url("../meta/fonts/Inter-Black.ttf");
   font-weight: 900;
 }
+
 body {
   place-items: center;
   /* background: #003; */
@@ -171,7 +174,7 @@ a:hover {
   font-size: clamp(1.25rem, 2.5vw, 1.75rem);
   font-family: "Inter", sans-serif;
   text-align: left;
-  width: minmax(80vw, 80%);
+  width: 100%;
   outline: 3px transparent solid;
   border: none;
   background: #333;
@@ -187,6 +190,26 @@ a:hover {
 
 #guess {
   color: #fff;
+}
+
+.ui-menu {
+	background: #333;
+	color: white;
+	font-family: "Inter", sans-serif;
+	font-weight: 400;
+	overflow-x: hidden;
+	overflow-y: scroll;
+	display: sticky;
+	width: 500px;
+	height: 200px;
+}
+
+.ui-menu-item-wrapper {
+	overflow: hidden;
+}
+
+.ui-helper-hidden-accessible {
+	display: none;
 }
 
 #guess:disabled {
