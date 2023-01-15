@@ -65,13 +65,11 @@ function getSummaries() {
 
 function mainFunction() {
 	getData(dataURL).then((data) => {
-		// initialise for replay
+		// <initialise for replay>
 		$("#loading").show();
 		$(".list").hide();
-
-    $( "#give-up" ).text( GIVE_UP_TEXT )
-		
-    GAME_OVER = false;
+		$( "#give-up" ).text( GIVE_UP_TEXT )
+		GAME_OVER = false;
 		articles = [];
 		articleNames = [];
 		articleNamesNormalised = [];
@@ -91,11 +89,11 @@ function mainFunction() {
 			$(this).css("background-color","#222")
 				.css("background-image","none");
 		});
-
 		$('#guess').attr('disabled',false);
         $("i").removeClass("fa-regular");
         $("i").addClass("fa-solid");
    		$('.points').html(points);
+		// </initialise>
 		
 		articles = data.items[0].articles;
 		
@@ -116,11 +114,13 @@ function mainFunction() {
 			titleString += articleNames[i] + "%7C";
 		}
 		titleString = titleString.slice(0, -3);
-		descURL = "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=description%7Cpageimages&titles=" + titleString + "&redirects=1&formatversion=2&piprop=thumbnail&pithumbsize=800&pilicense=any";
+		descURL = "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=description%7Cpageimages%7Cwbentityusage&titles=" + titleString + "&redirects=1&formatversion=2&piprop=thumbnail&pithumbsize=800&pilicense=any&wbeuentities=Q5";
 
 		getSummaries().then((data) => {
 			let summariesData = data.query.pages,
-                redirectList = data.query.redirects;
+                redirectList = data.query.redirects,
+				isHuman = data.query.pages.wbentityusage;
+			console.log(summariesData);
             if (redirectList !== undefined) {
                 for(var i=0;i<redirectList.length;i++) { // identify any redirects
                     let redirFrom = redirectList[i].from,
@@ -159,7 +159,7 @@ function mainFunction() {
 				topTen.push(articleNamesNormalised[i].toLowerCase());
 			}
 
-      populateGuessList()
+			populateGuessList();
 			
 			$(".list").fadeIn();
 			$("#loading").hide();
@@ -181,7 +181,7 @@ function userSubmit() {
     alreadyAnswered.push( index )
 
 		let correctAnswer = ".answer:eq(" + index + ")";
-		$(correctAnswer + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[index] + '">' + articleNamesNormalised[index] + '</a></strong>');
+		$(correctAnswer + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[index] + '" target="_blank">' + articleNamesNormalised[index] + '</a></strong>');
         $(correctAnswer).css('background-color', 'var(--green)');
         $(correctAnswer).css('background-image', 'url(' + images[index] + ')');
         if (correctArray.indexOf(index) > -1) {
@@ -234,7 +234,7 @@ function gameOver() {
         let unanswered = ".answer:eq(" + correctArray[i] + ")";
         $(unanswered).css('background-color', 'var(--red)');
         $(unanswered).css('background-image', 'url(' + images[correctArray[i]] + ')');
-        $(unanswered + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[correctArray[i]] + '">' + articleNamesNormalised[correctArray[i]] + '</a></strong>');
+        $(unanswered + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[correctArray[i]] + '" target="_blank">' + articleNamesNormalised[correctArray[i]] + '</a></strong>');
     }
     let points = 10 - correctArray.length;
     $('.points').html(points);

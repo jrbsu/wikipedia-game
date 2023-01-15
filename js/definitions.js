@@ -15,12 +15,12 @@ let images = ["","","","","","","","","",""];
 let emoji = ["😱","😭","😬","🥱","🙃","😤","🤤","😎","🤩","🤯"];
 let topTen = [];
 let correctArray = [0,1,2,3,4,5,6,7,8,9];
-let alreadyAnswered = []
+let alreadyAnswered = [];
 let lives = 3;
 let points = 0;
 let timerInput = "";
-let incorectWords = ["Incorrect!","Wrong!","Nope!","Eh-er!","No!","No Sir!","Don't think so!","Pfft, nope!","Ah, so close!","Unlucky!","Ouch!","Noooo!","Oops!","Dang!","Cripes!","Can you believe it?!"]
-let correctWords = [ "Awesome!", "Correct!", "Well Done!", "Nice One!", "That's One!", ]
+let incorectWords = ["Incorrect!","Wrong!","Nope!","Eh-er!","No!","No Sir!","Don't think so!","Pfft, nope!","Ah, so close!","Unlucky!","Ouch!","Noooo!","Oops!","Dang!","Cripes!","Can you believe it?!"];
+let correctWords = ["Awesome!","Correct!","Well done!","Nice one!","That's it!","Heck yeah!"];
 const ALERT_DURATION = 500;
 
 // We need to filter out some popular pages, since they'll appear disproportionately often: https://en.wikipedia.org/wiki/Wikipedia:Popular_pages
