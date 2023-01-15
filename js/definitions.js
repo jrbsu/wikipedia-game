@@ -21,7 +21,10 @@ let points = 0;
 let timerInput = "";
 let incorectWords = ["Incorrect!","Wrong!","Nope!","Eh-er!","No!","No Sir!","Don't think so!","Pfft, nope!","Ah, so close!","Unlucky!","Ouch!","Noooo!","Oops!","Dang!","Cripes!","Can you believe it?!"]
 let correctWords = [ "Awesome!", "Correct!", "Well Done!", "Nice One!", "That's One!", ]
+
+
 const ALERT_DURATION = 500;
+const TIMER_INTERVAL = null;
 
 // We need to filter out some popular pages, since they'll appear disproportionately often: https://en.wikipedia.org/wiki/Wikipedia:Popular_pages
 const badTitles = [

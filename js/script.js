@@ -71,31 +71,7 @@ function mainFunction() {
 
     $( "#give-up" ).text( GIVE_UP_TEXT )
 		
-    GAME_OVER = false;
-		articles = [];
-		articleNames = [];
-		articleNamesNormalised = [];
-		articleNamesLowercase = [];
-		viewCounts = [];
-		viewCountsCommas = [];
-		dataURL = "";
-		viewsURL = "";
-		descURL = "";
-		summaries = ["","","","","","","","","",""];
-		images = ["","","","","","","","","",""];
-		correctArray = [0,1,2,3,4,5,6,7,8,9];
-		topTen = [];
-		lives = 3;
-		points = 0;
-		$(".answer").each(function(){
-			$(this).css("background-color","#222")
-				.css("background-image","none");
-		});
-
-		$('#guess').attr('disabled',false);
-        $("i").removeClass("fa-regular");
-        $("i").addClass("fa-solid");
-   		$('.points').html(points);
+    resetState()
 		
 		articles = data.items[0].articles;
 		
@@ -163,12 +139,13 @@ function mainFunction() {
 			
 			$(".list").fadeIn();
 			$("#loading").hide();
-		}).catch(error => {
-			$("#error-box").removeClass("hidden");
+		})
+    .catch(error => {
+      $("#error").removeClass("hidden");
 		});
 	})
 	.catch(error => {
-		$("#error-box").removeClass("hidden");
+    $("#error").removeClass("hidden");
 	});
 }
 
@@ -274,13 +251,11 @@ $( "#give-up" ).click( e => {
   }
 }) 
 
-
-
 function newDayTimer() {
 	let tomorrowDate = new Date(),
 	tomorrowMonth = tomorrowDate.getMonth()+1,
 	tomorrowDay = tomorrowDate.getDate()+1,
-	fullDate = tomorrowDate.getFullYear() + '/' + (tomorrowMonth<10 ? '0' : '') + tomorrowMonth + '/' + (tomorrowDay<10 ? '0' : '') + tomorrowDay;
+	fullDate = tomorrowDate.getFullYear() + "/" + (tomorrowMonth < 10 ? "0" : "") + tomorrowMonth + "/" + (tomorrowDay < 10 ? "0" : "") + tomorrowDay;
 	
 	const second = 1000,
 		  minute = second * 60,
@@ -288,18 +263,30 @@ function newDayTimer() {
 		  day = hour * 24;
 	
 	const countDown = new Date(fullDate).getTime();
-	const x = setInterval(function() {
+
+	TIMER_INTERVAL = setInterval( function() {
 		const now = new Date().getTime(),
 			  distance = countDown - now;
-		
-		let hoursOut = Math.floor((distance % (day)) / (hour)),
-			minutesOut = Math.floor((distance % (hour)) / (minute)),
-			secondsOut = Math.floor((distance % (minute)) / second);
-				
-		$("#hours").text((hoursOut<10 ? '0' : '') + hoursOut);
-		$("#minutes").text((minutesOut<10 ? '0' : '') + minutesOut);
-		$("#seconds").text((secondsOut<10 ? '0' : '') + secondsOut);
-      }, 0)
+        
+    // idea with this is that, should the timer begin to spit out negatives, it'll reset
+    if ( distance < 0 )
+    {
+      clearInterval( TIMER_INTERVAL );
+      newDayTimer();
+    }
+    
+    let hoursOut   = Math.floor( ( distance % day    ) / hour );
+    let minutesOut = Math.floor( ( distance % hour   ) / minute );
+    let secondsOut = Math.floor( ( distance % minute ) / second );
+			
+
+		$( "#hours"  ).text( ( hoursOut   < 10 ? "0" : "" ) + hoursOut   );
+		$( "#minutes").text( ( minutesOut < 10 ? "0" : "" ) + minutesOut );
+		$( "#seconds").text( ( secondsOut < 10 ? "0" : "" ) + secondsOut );
+
+
+  
+  }, 0)
 }
 
 $("#help").click(function(){
@@ -374,4 +361,35 @@ function randomGame()
   $("#game-over").addClass("hidden");
   randomDate();
 	mainFunction();
+}
+
+function resetState()
+{
+  GAME_OVER = false;
+  articles = [];
+  articleNames = [];
+  articleNamesNormalised = [];
+  articleNamesLowercase = [];
+  viewCounts = [];
+  viewCountsCommas = [];
+  dataURL = "";
+  viewsURL = "";
+  descURL = "";
+  summaries = ["","","","","","","","","",""];
+  images = ["","","","","","","","","",""];
+  correctArray = [0,1,2,3,4,5,6,7,8,9];
+  topTen = [];
+  lives = 3;
+  points = 0;
+
+  $(".answer").each(function(){
+    $(this).css("background-color","#222")
+      .css("background-image","none");
+  });
+
+  $('#guess').attr('disabled', false);
+  $("i").removeClass("fa-regular");
+  $("i").addClass("fa-solid");
+
+  $('.points').text( points );
 }

@@ -484,19 +484,6 @@ button {
   width: initial;
 }
 
-@media screen and (max-width: 640px) {
-  h1 {
-    font-size: 1.2em;
-  }
-
-  #lives {
-    font-size: 2em;
-  }
-
-  button {
-    font-size: 1em;
-  }
-}
 
 #score {
   color: white;
@@ -644,7 +631,37 @@ button {
   }
 }
 
+@keyframes anim_beat {
+  0%, 100% { scale: 1  }
+  50%     { scale: 1.1 }
+}
+
+
+@media screen and (max-width: 640px) {
+  h1 {
+    font-size: 1.2em;
+  }
+
+  #lives {
+    font-size: 2em;
+  }
+
+  button {
+    font-size: 1em;
+  }
+}
+
 @media ( orientation: portrait ) {
+  
+  #guess
+  {
+    width: 100%;
+  }
+  
+  #answers-wrap
+  {
+    width: 100vw;
+  }
   .modal
   {
     .modal-content
@@ -652,9 +669,4 @@ button {
       width: 90%;
     }
   }
-}
-
-@keyframes anim_beat {
-  0%, 100% { scale: 1  }
-  50%     { scale: 1.1 }
 }
