@@ -201,7 +201,7 @@ a:hover {
 	overflow-y: scroll;
 	display: sticky;
 	width: 500px;
-	height: 200px;
+	max-height: 200px;
 }
 
 .ui-menu-item-wrapper {

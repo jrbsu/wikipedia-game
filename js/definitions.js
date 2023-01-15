@@ -52,7 +52,7 @@ const badTitles = [
 
 const badTitlesRegex = /(Special:|Wikipedia:|File:|Help:|User:|Deaths_in|.php|List_of|disambiguation|Category:|XXX|[iI]ndex)/gi;
 
-const MAX_GUESS_LIST_OPTIONS = 10
+const MAX_GUESS_LIST_OPTIONS = 100
 
 const NEW_GAME_TEXT = "New"
 const GIVE_UP_TEXT  = "Resign"
