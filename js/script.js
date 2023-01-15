@@ -185,8 +185,10 @@ function mainFunction() {
 }
 
 function userCorrect(index) {
-  if (alreadyAnswered.includes(index)) return
-  alreadyAnswered.push(index);
+  if (alreadyAnswered.includes(index)) {
+	alreadyAnswered.push(index);
+	console.log("added " + index, alreadyAnswered);
+  }
   let correctAnswer = ".answer:eq(" + index + ")";
   $(correctAnswer + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[index] + '" target="_blank">' + articleNamesNormalised[index] + '</a></strong>');
   $(correctAnswer).css('background-color', 'var(--green)');
@@ -228,6 +230,8 @@ function userSubmit() {
       if (names[i] == guess) {
         namesArray.push(guess);
 		userCorrect(i);
+		alreadyAnswered.push(guess);
+		names[i] = "";
       }
     }
   } else {
@@ -377,8 +381,6 @@ function populateGuessList(query = "") {
   for (let title of articleNamesSorted) {
     title = title.toLowerCase();
     acGuesses.push(title);
-    if ($("#guess-list").children().length >= MAX_GUESS_LIST_OPTIONS)
-      break
   }
   $("#guess").autocomplete({
     source: acGuesses
