@@ -23,19 +23,16 @@ html {
   src: url("../meta/fonts/Inter.ttf");
   font-weight: 400;
 }
-
 @font-face {
   font-family: "Inter";
   src: url("../meta/fonts/Inter-ExtraBold.ttf");
   font-weight: 700;
 }
-
 @font-face {
   font-family: "Inter";
   src: url("../meta/fonts/Inter-Black.ttf");
   font-weight: 900;
 }
-
 body {
   place-items: center;
   /* background: #003; */
@@ -247,7 +244,7 @@ strong {
   background-color: var(--color-dark);
 }
 .modal .modal-content .highlight {
-  font-weight: 700;
+  font-weight: 600;
 }
 .modal .modal-content .heading {
   font-size: 2rem;
@@ -419,17 +416,6 @@ button {
   width: initial;
 }
 
-@media screen and (max-width: 640px) {
-  h1 {
-    font-size: 1.2em;
-  }
-  #lives {
-    font-size: 2em;
-  }
-  button {
-    font-size: 1em;
-  }
-}
 #score {
   color: white;
   font-weight: 700;
@@ -613,11 +599,6 @@ button {
     rotate: 0deg;
   }
 }
-@media (orientation: portrait) {
-  .modal .modal-content {
-    width: 90%;
-  }
-}
 @-webkit-keyframes anim_beat {
   0%, 100% {
     scale: 1;
@@ -632,5 +613,27 @@ button {
   }
   50% {
     scale: 1.1;
+  }
+}
+@media screen and (max-width: 640px) {
+  h1 {
+    font-size: 1.2em;
+  }
+  #lives {
+    font-size: 2em;
+  }
+  button {
+    font-size: 1em;
+  }
+}
+@media (orientation: portrait) {
+  #guess {
+    width: 100%;
+  }
+  #answers-wrap {
+    width: 100vw;
+  }
+  .modal .modal-content {
+    width: 90%;
   }
 }/*# sourceMappingURL=style.css.map */
