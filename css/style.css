@@ -39,7 +39,7 @@ html {
 body {
   place-items: center;
   /* background: #003; */
-  background-color: rgb(12, 61, 105);
+  background-color: rgb(9, 10, 48);
   font-family: "Inter", sans-serif;
   transition: color 200ms;
   height: 100vh;
