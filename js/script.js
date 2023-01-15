@@ -81,6 +81,7 @@ function mainFunction() {
 		descURL = "";
 		summaries = ["","","","","","","","","",""];
 		images = ["","","","","","","","","",""];
+		names = ["","","","","","","","","",""];
 		correctArray = [0,1,2,3,4,5,6,7,8,9];
 		topTen = [];
 		lives = 3;
@@ -120,7 +121,6 @@ function mainFunction() {
 			let summariesData = data.query.pages,
                 redirectList = data.query.redirects,
 				isHuman = data.query.pages.wbentityusage;
-			console.log(summariesData);
             if (redirectList !== undefined) {
                 for(var i=0;i<redirectList.length;i++) { // identify any redirects
                     let redirFrom = redirectList[i].from,
@@ -145,8 +145,17 @@ function mainFunction() {
                     images[index] = imageName;
                     new Image().src = imageName; // pre-load images
                 }
+				
+				if (summariesData[i].wbentityusage !== undefined) {
+					let a = summariesData[i].title.split(" ");
+					if (a[a.length-1].match(/^\(/) !== null) { // if there's a bracketed term we don't want that
+						names[index] = a[a.length-2].toLowerCase();
+					} else {
+						names[index] = a[a.length-1].toLowerCase();
+					}
+				}
 			}
-            
+            console.log(names);
             // load this onto page
 			for(var i=0;i<10;i++) {
 				$('.answer-text:eq(' + i + ')').html(censor(articleNamesNormalised[i]));
@@ -172,55 +181,69 @@ function mainFunction() {
 	});
 }
 
-function userSubmit() {
-  let guess = $('#guess').val();
-	let index = topTen.indexOf(guess.toLowerCase());
-
-	if (index !== null && index !== -1) { // user is correct
-    if ( alreadyAnswered.includes( index ) ) return
-    alreadyAnswered.push( index )
-
+function userCorrect(index) {
+	if ( alreadyAnswered.includes( index ) ) return
+		alreadyAnswered.push( index );
 		let correctAnswer = ".answer:eq(" + index + ")";
 		$(correctAnswer + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[index] + '" target="_blank">' + articleNamesNormalised[index] + '</a></strong>');
-        $(correctAnswer).css('background-color', 'var(--green)');
-        $(correctAnswer).css('background-image', 'url(' + images[index] + ')');
-        if (correctArray.indexOf(index) > -1) {
-            correctArray.splice(correctArray.indexOf(index), 1);
-        }
-        $('#guess').val("");
-        
-        $('#guess').focus();
-		points++;
-   		$('.points').html(points);
+		$(correctAnswer).css('background-color', 'var(--green)');
+		$(correctAnswer).css('background-image', 'url(' + images[index] + ')');
+		if (correctArray.indexOf(index) > -1) {
+			correctArray.splice(correctArray.indexOf(index), 1);
+		}
+		$('#guess').val("");
 
-        //$('#correct').show().delay(1000).fadeOut();
+		$('#guess').focus();
+		points++;
+		$('.points').html(points);
+
+		//$('#correct').show().delay(1000).fadeOut();
 		if (correctArray.length === 0) {
 			return gameOver();			
 		}
 
-    let randomStatement = correctWords[Math.floor(Math.random() * incorectWords.length)];
-    $('#correct-text').html(randomStatement);
-    $('#correct-modal').css( { display: "flex" } ).delay( ALERT_DURATION ).fadeOut();
-    $( "#correct-modal > .modal-content" ).addClass( "anim_float" ).delay( ALERT_DURATION ).queue( () => { $(  "#correct > .modal-content" ).removeClass( "anim_float" ) } )
-	} 
-  // user is incorrect
-  else if (index == -1) {
-    lives -= 1;
-    $("i:eq(" + lives + ")").removeClass("fa-solid");
-    $("i:eq(" + lives + ")").addClass("fa-regular");
-    $('#guess').val("");
-    $('#guess').focus();
-    let randomStatement = incorectWords[Math.floor(Math.random() * incorectWords.length)];
-    $('#incorrect-text').html(randomStatement);
-    $('#incorrect').css( { display: "flex" } ).delay( ALERT_DURATION ).fadeOut();
-    $( "#incorrect > .modal-content" ).addClass( "anim_screen_shake" ).delay( ALERT_DURATION ).queue( () => { $(  "#incorrect > .modal-content" ).removeClass( "anim_screen_shake" ) } )
-  }
-  if (lives == 0) {
-    return gameOver();
-  }
+		let randomStatement = correctWords[Math.floor(Math.random() * incorectWords.length)];
+		$('#correct-text').html(randomStatement);
+		$('#correct-modal').css( { display: "flex" } ).delay( ALERT_DURATION ).fadeOut();
+		$( "#correct-modal > .modal-content" ).addClass( "anim_float" ).delay( ALERT_DURATION ).queue( () => { $(  "#correct > .modal-content" ).removeClass( "anim_float" ) } );
+}
 
-  $('#guess').val("");
-  populateGuessList()
+function userSubmit() {
+	let guess = $('#guess').val().toLowerCase();
+	let index = topTen.indexOf(guess);
+	
+	// user is correct
+	let namesArray = []; // in case we need to handle multiple correct values at the same time
+	if (index !== null && index !== -1) { 
+		userCorrect(index);
+	} else if (names.indexOf(guess) !== -1) {
+		for (var i=0;i<10;i++) {
+			if (names[i] == guess) {
+				namesArray.push(guess);
+			}
+		}
+		for (var i=0;i<namesArray.length;i++) {
+			userCorrect(i);
+		}
+	} else {
+	// user is incorrect
+	// else if (index == -1) {
+		lives -= 1;
+		$("i:eq(" + lives + ")").removeClass("fa-solid");
+		$("i:eq(" + lives + ")").addClass("fa-regular");
+		$('#guess').val("");
+		$('#guess').focus();
+		let randomStatement = incorectWords[Math.floor(Math.random() * incorectWords.length)];
+		$('#incorrect-text').html(randomStatement);
+		$('#incorrect').css( { display: "flex" } ).delay( ALERT_DURATION ).fadeOut();
+		$( "#incorrect > .modal-content" ).addClass( "anim_screen_shake" ).delay( ALERT_DURATION ).queue( () => { $(  "#incorrect > .modal-content" ).removeClass( "anim_screen_shake" ) } )
+	}
+	if (lives == 0) {
+		return gameOver();
+	}
+
+	$('#guess').val("");
+	populateGuessList();
 }
 
 function gameOver() {

@@ -12,6 +12,7 @@ let viewsURL = "";
 let descURL = "";
 let summaries = ["","","","","","","","","",""];
 let images = ["","","","","","","","","",""];
+let names = ["","","","","","","","","",""];
 let emoji = ["😱","😭","😬","🥱","🙃","😤","🤤","😎","🤩","🤯"];
 let topTen = [];
 let correctArray = [0,1,2,3,4,5,6,7,8,9];
@@ -48,7 +49,7 @@ const badTitles = [
  "Wiki"
 ]
 
-const badTitlesRegex = /(Special:|Wikipedia:|File:|Help:|User:|Deaths_in|.php|List_of|disambiguation|Category:)/gi;
+const badTitlesRegex = /(Special:|Wikipedia:|File:|Help:|User:|Deaths_in|.php|List_of|disambiguation|Category:|XXX|[iI]ndex)/gi;
 
 const MAX_GUESS_LIST_OPTIONS = 10
 
