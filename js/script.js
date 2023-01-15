@@ -12,8 +12,7 @@ function getDate() {
     }).format(dateOutput),
     titleOutput = day + " " + intl + " " + d.getFullYear();
   timerInput = output;
-  //dataURL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia.org/all-access/" + output;
-  dataURL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia.org/all-access/2016/07/09";
+  dataURL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia.org/all-access/" + output;
   $('#title').html("Wikipedia guessing game:<br/>" + titleOutput);
 }
 
