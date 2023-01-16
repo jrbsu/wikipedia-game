@@ -21,8 +21,8 @@ let alreadyAnswered = [];
 let lives = 3;
 let points = 0;
 let timerInput = "";
-let incorectWords = ["Incorrect!","Wrong!","Nope!","Eh-er!","No!","No Sir!","Don't think so!","Pfft, nope!","Ah, so close!","Unlucky!","Ouch!","Noooo!","Oops!","Dang!","Cripes!","Can you believe it?!"];
-let correctWords = ["Awesome!","Correct!","Well done!","Nice one!","That's it!","Heck yeah!"];
+let incorectWords = ["Incorrect!","Wrong!","Nope!","Eh-er!","No!","No Sir!","Don't think so!","Pfft, nope!","Ah, so close!","Unlucky!","Ouch!","Noooo!","Oops!","Dang!","Cripes!","Can you believe it?!","Oh jeez..."];
+let correctWords = ["Awesome!","Correct!","Well done!","Nice one!","That's it!","Heck yeah!","All right!"];
 const ALERT_DURATION = 500;
 const TIMER_INTERVAL = null;
 
@@ -48,7 +48,8 @@ const badTitles = [
  "Search",
  "Creative Commons Attribution",
  "-",
- "Wiki"
+ "Wiki",
+ "Web scraping"
 ]
 
 const badTitlesRegex = /(Special:|Wikipedia:|File:|Help:|User:|Deaths_in|.php|List_of|disambiguation|Category:|XXX|[iI]ndex)/gi;
