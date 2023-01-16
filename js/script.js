@@ -80,6 +80,7 @@ function mainFunction() {
       articleNamesLowercase = [];
       viewCounts = [];
       viewCountsCommas = [];
+	  alreadyAnswered = [];
       dataURL = "";
       viewsURL = "";
       descURL = "";
@@ -218,7 +219,6 @@ function userSubmit() {
 
   if (alreadyAnswered.indexOf(guess) == -1) {
 	alreadyAnswered.push(guess);
-	console.log("added!! " + alreadyAnswered);
   } else {
 	$('#guess').val("");
 	return;
@@ -233,7 +233,6 @@ function userSubmit() {
       if (names[i] == guess && alreadyAnswered.indexOf(guess) !== -1) {
 		userCorrect(i);
 		alreadyAnswered.push(articleNamesNormalised[i].toLowerCase());
-		console.log("added2!! " + alreadyAnswered);
 		names[i] = "";
       }
     }
