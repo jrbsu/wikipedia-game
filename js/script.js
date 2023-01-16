@@ -122,9 +122,9 @@ function mainFunction() {
       descURL = "https://en.wikipedia.org/w/api.php?action=query&format=json&origin=*&prop=description%7Cpageimages%7Cwbentityusage&titles=" + titleString + "&redirects=1&formatversion=2&piprop=thumbnail&pithumbsize=800&pilicense=any&wbeuentities=Q5";
 
       getSummaries().then((data) => {
-        let summariesData = data.query.pages,
-          redirectList = data.query.redirects,
+        let redirectList = data.query.redirects,
           isHuman = data.query.pages.wbentityusage;
+	    summariesData = data.query.pages;
         if (redirectList !== undefined) {
           for (var i = 0; i < redirectList.length; i++) { // identify any redirects
             let redirFrom = redirectList[i].from,
@@ -150,7 +150,7 @@ function mainFunction() {
             new Image().src = imageName; // pre-load images
           }
 
-          if (summariesData[i].wbentityusage !== undefined) {
+          if (summariesData[i].wbentityusage !== undefined) { // split human names
             let a = summariesData[i].title.split(" ");
             if (a[a.length - 1].match(/^\(/) !== null) { // if there's a bracketed term we don't want that
               names[index] = a[a.length - 2].toLowerCase();
@@ -170,7 +170,6 @@ function mainFunction() {
           $('.pageviews:eq(' + i + ')').html(viewCountsCommas[i] + " pageviews");
           topTen.push(articleNamesNormalised[i].toLowerCase());
         }
-
         populateGuessList();
 
         $(".list").fadeIn();
@@ -185,10 +184,6 @@ function mainFunction() {
 }
 
 function userCorrect(index) {
-  if (alreadyAnswered.includes(index)) {
-	alreadyAnswered.push(index);
-	console.log("added " + index, alreadyAnswered);
-  }
   let correctAnswer = ".answer:eq(" + index + ")";
   $(correctAnswer + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[index] + '" target="_blank">' + articleNamesNormalised[index] + '</a></strong>');
   $(correctAnswer).css('background-color', 'var(--green)');
@@ -221,16 +216,24 @@ function userSubmit() {
   let guess = $('#guess').val().toLowerCase();
   let index = topTen.indexOf(guess);
 
+  if (alreadyAnswered.indexOf(guess) == -1) {
+	alreadyAnswered.push(guess);
+	console.log("added!! " + alreadyAnswered);
+  } else {
+	$('#guess').val("");
+	return;
+  }
+
   // user is correct
-  let namesArray = []; // in case we need to handle multiple correct values at the same time
+  // in case we need to handle multiple correct values at the same time
   if (index !== null && index !== -1) {
     userCorrect(index);
   } else if (names.indexOf(guess) !== -1) {
     for (var i = 0; i < 10; i++) {
-      if (names[i] == guess) {
-        namesArray.push(guess);
+      if (names[i] == guess && alreadyAnswered.indexOf(guess) !== -1) {
 		userCorrect(i);
-		alreadyAnswered.push(guess);
+		alreadyAnswered.push(articleNamesNormalised[i].toLowerCase());
+		console.log("added2!! " + alreadyAnswered);
 		names[i] = "";
       }
     }
@@ -306,8 +309,6 @@ $("#give-up").click(e => {
   }
 })
 
-
-
 function newDayTimer() {
   let tomorrowDate = new Date(),
     tomorrowMonth = tomorrowDate.getMonth() + 1,
@@ -355,7 +356,7 @@ $("#random").click(function () {
   $("#give-up").addClass(GIVE_UP_CLASS)
   $("#give-up").removeClass(NEW_GAME_CLASS)
   $("#give-up").text(GIVE_UP_TEXT)
-  randomGame()
+  randomGame();
 });
 
 function censor(a) {
@@ -371,19 +372,23 @@ $(document).ready(function () {
 });
 
 $("#guess").on("input", e => {
-  populateGuessList(e.target.value.toLowerCase())
-})
+  populateGuessList();
+});
 
-
-function populateGuessList(query = "") {
-  $("#guess-list").empty()
-  let acGuesses = []; // ac = autocomplete
-  for (let title of articleNamesSorted) {
-    title = title.toLowerCase();
-    acGuesses.push(title);
-  }
+function populateGuessList() {
   $("#guess").autocomplete({
-    source: acGuesses
+    source: articleNamesLowercase.sort(),
+    open: function(e, ui) {
+      let acData = $(this).data('ui-autocomplete');
+      acData.menu.element.find('li').each(function() {
+        let me = $(this);
+        let keywords = acData.term.split(' ').join('|');
+        let textWrapper = me.find('.ui-menu-item-wrapper');
+		let text = textWrapper.text();
+		let newTextHtml = text.replace(new RegExp("(" + keywords + ")", "gi"), '<span class="ui-autocomplete-term">$1</span>');
+		textWrapper.html(newTextHtml);
+      });
+    }
   });
 }
 

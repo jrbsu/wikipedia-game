@@ -212,6 +212,11 @@ a:hover {
 	display: none;
 }
 
+.ui-autocomplete-term {
+	text-decoration: underline;
+	font-weight: 700;
+}
+
 #guess:disabled {
   visibility: hidden;
 }
