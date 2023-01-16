@@ -68,6 +68,7 @@ function getSummaries() {
 }
 
 function mainFunction() {
+  window.scrollTo(0,0);
   getData(dataURL).then((data) => {
       // <initialise for replay>
       $("#loading").show();
@@ -290,21 +291,21 @@ $("#guess").on('keydown', function (e) {
 });
 
 $("#guess").on("submit", e => {
-  userSubmit()
+  userSubmit();
+  $("#guess").val("");
 })
 
 $("#give-up").click(e => {
   if (GAME_OVER) {
     $("#give-up").addClass(GIVE_UP_CLASS)
     $("#give-up").removeClass(NEW_GAME_CLASS)
-
     $("#give-up").text(GIVE_UP_TEXT)
-    randomGame()
+    randomGame();
   } else {
     $("#give-up").addClass(NEW_GAME_CLASS)
     $("#give-up").removeClass(GIVE_UP_CLASS)
     $("#give-up").text(NEW_GAME_TEXT)
-    gameOver()
+    gameOver();
   }
 })
 
@@ -343,8 +344,8 @@ $("#help-close").click(function () {
 });
 
 $("#error-play").click(() => {
-  $("#error").addClass("hidden")
-  randomGame()
+  $("#error").addClass("hidden");
+  randomGame();
 })
 
 $("#review").click(function () {
@@ -352,9 +353,9 @@ $("#review").click(function () {
 });
 
 $("#random").click(function () {
-  $("#give-up").addClass(GIVE_UP_CLASS)
-  $("#give-up").removeClass(NEW_GAME_CLASS)
-  $("#give-up").text(GIVE_UP_TEXT)
+  $("#give-up").addClass(GIVE_UP_CLASS);
+  $("#give-up").removeClass(NEW_GAME_CLASS);
+  $("#give-up").text(GIVE_UP_TEXT);
   randomGame();
 });
 
