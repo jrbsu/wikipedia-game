@@ -139,8 +139,6 @@ function mainFunction() {
           }
         }
 
-        articleNamesSorted.sort();
-
         for (var i = 0; i < 10; i++) { // load in the article names, summaries, imgs (for the top ten only)
           let index = articleNamesNormalised.indexOf(summariesData[i].title);
 
@@ -159,8 +157,14 @@ function mainFunction() {
             } else {
               names[index] = a[a.length - 1].toLowerCase();
             }
+            if (!articleNamesLowercase.includes(names[index])) {
+              articleNamesLowercase.push(names[index]);
+            }
           }
         }
+
+        articleNamesSorted.sort();
+        
         // load this onto page
         for (var i = 0; i < 10; i++) {
           $('.answer-text:eq(' + i + ')').html(censor(articleNamesNormalised[i]));
