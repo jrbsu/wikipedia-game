@@ -35,18 +35,19 @@
 				<p class="heading">Sorry :(</p>
 				<p>There was an issue loading the data for today's game...</p>
 				<p>Most likely Wikipedia's API hasn't updated with yesterday's data (or you have an adblocker enabled).</p>
-        <button id="error-play" class="modal-button">Play Random Day Instead</button>
+				<button id="error-play" class="modal-button">Play random day instead</button>
 			</div>
 		</div>
 
 		<div id="help-modal" class="modal hidden">
 			<div class="modal-content">
-				<p class="heading">Help</p>
 				<p>Each of the clues refers to one of the <span class="highlight">top read Wikipedia articles</span>. Each has a description, initials, and the number of pageviews the article received on that day. To play, begin typing a guess in the input box at the top.</p>
-                <p>The game will filter out perennial entries in the top ten, such as technical pages used by bots and <a href="https://en.wikipedia.org/wiki/WP:POPULAR" target="_blank">articles that are disproportionately trafficked</a> (e.g., "Deaths in [year]", etc.)</p>
-				<p>As you guess, <span class="highlight">the input will filter through the top 1000 most-read articles of the day</span>. You can use this to guide your guesses in the right direction.</p>
+                <p>The game will filter out perennial entries in the top ten, such as technical pages used by bots and <a href="https://en.wikipedia.org/wiki/WP:POPULAR" target="_blank">articles that are disproportionately trafficked</a>. As you guess, <span class="highlight">the input will filter through the top 1000 most-read articles of the day</span>. You can use this to guide your guesses in the right direction.</p>
 				<p>If you just see a spinning wheel, it's possible that you have an adblocker enabled. This site collects no personal data itself, but does make use of <a href="https://fontawesome.com" target="_blank">FontAwesome</a> resources. It also makes API calls to Wikipedia which are blocked by some adblockers.</p>
-        <button id="help-close" class="modal-button">Okay :)</button>
+				<div class="button-grid">
+					<button id="help-close" class="modal-button help-button">Close</button>
+					<button id="colourblind-mode" class="modal-button small-button help-button">Turn colourblind<br />mode on</button>
+				</div>
 			</div>
 		</div>
 
@@ -54,6 +55,19 @@
 			<div id="game-over-text" class="modal-content">
 				<p class="heading">Game over!</p>
 				<p id="score-text">You scored <span class="points">0</span>/10 in <span class="timer-value highlight">0:00</span>! <span id="emoji"></span></p>
+				<div id="share-text">
+					<span class="answer-block"></span>
+					<span class="answer-block"></span>
+					<span class="answer-block"></span>
+					<span class="answer-block"></span>
+					<span class="answer-block"></span>
+					<span class="answer-block"></span>
+					<span class="answer-block"></span>
+					<span class="answer-block"></span>
+					<span class="answer-block"></span>
+					<span class="answer-block"></span>
+					<span class="answer-block"></span>
+				</div>
 				<div id="game-over-grid">
 					<div id="review-box">
 						<button id="review" class="game-over-button modal-button">

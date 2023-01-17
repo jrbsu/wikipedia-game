@@ -3,14 +3,14 @@
 
 function getDate() {
   let d = new Date(),
-    month = d.getMonth() + 1,
-    day = d.getDate() - 1,
-    output = d.getFullYear() + '/' + (month < 10 ? '0' : '') + month + '/' + (day < 10 ? '0' : '') + day,
-    dateOutput = new Date(d.getFullYear(), month - 1, day, 0, 0, 0),
+    month = d.getUTCMonth() + 1,
+    day = d.getUTCDate() - 1,
+    output = d.getUTCFullYear() + '/' + (month < 10 ? '0' : '') + month + '/' + (day < 10 ? '0' : '') + day,
+    dateOutput = new Date(d.getUTCFullYear(), month - 1, day, 0, 0, 0),
     intl = new Intl.DateTimeFormat("en", {
       month: "long"
     }).format(dateOutput),
-    titleOutput = day + " " + intl + " " + d.getFullYear();
+  titleOutput = day + " " + intl + " " + d.getUTCFullYear();
   timerInput = output;
   dataURL = "https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia.org/all-access/" + output;
   $('#title').html("Wikipedia guessing game:<br/>" + titleOutput);
@@ -201,7 +201,7 @@ function userCorrect(index) {
     correctArray.splice(correctArray.indexOf(index), 1);
   }
   $('#guess').val("");
-
+  blocks[index] = "🟩";
   $('#guess').focus();
   points++;
   $('.points').html(points);
@@ -284,6 +284,9 @@ function gameOver() {
   let points = 10 - correctArray.length;
   $('.points').html(points);
   $('#emoji').html(emoji[points]);
+  for (var i=0;i<10;i++) {
+	$(".answer-block:eq(" + i + ")").html(blocks[i]);
+  }
   $('#game-over').removeClass('hidden');
 }
 
@@ -318,16 +321,16 @@ $("#give-up").click(e => {
 
 function newDayTimer() {
   let tomorrowDate = new Date(),
-    tomorrowMonth = tomorrowDate.getMonth() + 1,
-    tomorrowDay = tomorrowDate.getDate() + 1,
-    fullDate = tomorrowDate.getFullYear() + '/' + (tomorrowMonth < 10 ? '0' : '') + tomorrowMonth + '/' + (tomorrowDay < 10 ? '0' : '') + tomorrowDay;
+    tomorrowMonth = tomorrowDate.getUTCMonth() + 1,
+    tomorrowDay = tomorrowDate.getUTCDate() + 1,
+    fullDate = tomorrowDate.getUTCFullYear() + '/' + (tomorrowMonth < 10 ? '0' : '') + tomorrowMonth + '/' + (tomorrowDay < 10 ? '0' : '') + tomorrowDay;
 
   const second = 1000,
     minute = second * 60,
     hour = minute * 60,
     day = hour * 24;
 
-  const countDown = new Date(fullDate).getTime();
+  const countDown = new Date(Date.UTC(tomorrowDate.getUTCFullYear(), tomorrowMonth, tomorrowDay, 0, 0, 0)).getTime();
   const x = setInterval(function () {
     const now = new Date().getTime(),
       distance = countDown - now;
@@ -357,6 +360,10 @@ $("#error-play").click(() => {
 
 $("#review").click(function () {
   $("#game-over").addClass("hidden");
+});
+
+$("#colourblind-mode").click(function () {
+  colourBlindMode();
 });
 
 $("#random").click(function () {
@@ -414,6 +421,16 @@ function startTimer() {
 function stopTimer() {
   clearInterval(timerInterval);
   $(".timer-value").html(timerValue);
+}
+
+function colourBlindMode() {
+  if ($("html").css("--green") == "#070") {
+    $("html").css("--green","#22A");
+	$("#colourblind-mode").html("Turn colourblind<br />mode off");
+  } else {
+    $("html").css("--green","#070");
+	$("#colourblind-mode").html("Turn colourblind<br />mode on");
+  }
 }
 
 function randomGame() {
