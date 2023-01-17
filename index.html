@@ -53,7 +53,7 @@
 		<div id="game-over" class="modal hidden">
 			<div id="game-over-text" class="modal-content">
 				<p class="heading">Game over!</p>
-				<p id="score-text">You scored <span class="points">0</span>/10! <span id="emoji"></span></p>
+				<p id="score-text">You scored <span class="points">0</span>/10 in <span class="timer-value highlight">0:00</span>! <span id="emoji"></span></p>
 				<div id="game-over-grid">
 					<div id="review-box">
 						<button id="review" class="game-over-button modal-button">
@@ -67,8 +67,8 @@
 					</div>
         </div>
 
-        <div id="timer-text">
-          Next game in... <span id="timer"><span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds">00</span></span>
+        <div id="countdown-text">
+          Next game in... <span id="countdown"><span id="cd-hours">00</span>:<span id="cd-minutes">00</span>:<span id="cd-seconds">00</span></span>
         </div>
 			</div>
 		</div>
@@ -77,8 +77,6 @@
 			<div id="header-wrap">
 				<h1 id="title">Wikipedia guessing game</h1>
 				<input type="text" list="guess-list" id="guess" name="guess" placeholder="Enter your guess here!" autocomplete="off" size="50">
-				<!-- <datalist id="guess-list">
-				</datalist> -->
 				<div id="hearts-grid" class="button-box-container">
 					<div id="help-box">
 						<button id="help" class="button-box help-box">
@@ -88,6 +86,9 @@
 					<div id="lives">
 						<i class="fa-solid fa-heart"></i> <i class="fa-solid fa-heart"></i> <i class="fa-solid fa-heart"></i>
 						<div id="score"><span class="points"></span>/10</div>
+                        <div id="timer-text">
+                          <span id="timer"><span id="tm-minutes">00</span>:<span id="tm-seconds">00</span></span>
+                        </div>
 					</div>
 					<div id="give-up-box">
 						<button id="give-up" class="button-box give-up-box">

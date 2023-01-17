@@ -25,6 +25,8 @@ let incorectWords = ["Incorrect!","Wrong!","Nope!","Eh-er!","No!","No Sir!","Don
 let correctWords = ["Awesome!","Correct!","Well done!","Nice one!","That's it!","Heck yeah!","All right!"];
 const ALERT_DURATION = 500;
 const TIMER_INTERVAL = null;
+let timerInterval = null;
+let timerValue = "";
 
 // We need to filter out some popular pages, since they'll appear disproportionately often: https://en.wikipedia.org/wiki/Wikipedia:Popular_pages
 const badTitles = [

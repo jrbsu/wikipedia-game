@@ -361,12 +361,12 @@ strong {
 #game-over .modal-content {
   outline: 3px #666 solid;
 }
-#game-over .modal-content #timer-text {
+#game-over .modal-content #countdown-text {
   display: inline-grid;
   color: #ccc;
   font-style: italic;
 }
-#game-over .modal-content #timer {
+#game-over .modal-content #countdown {
   font-style: normal;
   display: inline;
   font-weight: 700;
@@ -665,3 +665,9 @@ button {
     width: 90%;
   }
 }/*# sourceMappingURL=style.css.map */
+#timer {
+  display: inline;
+  font-weight: 400;
+  font-size: 2rem;
+  color: #fff;
+}

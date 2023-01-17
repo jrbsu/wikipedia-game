@@ -100,6 +100,8 @@ function mainFunction() {
       $("i").removeClass("fa-regular");
       $("i").addClass("fa-solid");
       $('.points').html(points);
+      $("#tm-seconds").html("00");
+      $("#tm-minutes").html("00");
       // </initialise>
 
       articles = data.items[0].articles;
@@ -180,6 +182,7 @@ function mainFunction() {
 
         $(".list").fadeIn();
         $("#loading").hide();
+        startTimer();
       }).catch(error => {
         $("#error-box").removeClass("hidden");
       });
@@ -270,7 +273,7 @@ function gameOver() {
     return
 
   GAME_OVER = true
-
+  stopTimer();
   $('#guess').attr('disabled', 'disabled');
   for (var i = 0; i < correctArray.length; i++) {
     let unanswered = ".answer:eq(" + correctArray[i] + ")";
@@ -333,9 +336,9 @@ function newDayTimer() {
       minutesOut = Math.floor((distance % (hour)) / (minute)),
       secondsOut = Math.floor((distance % (minute)) / second);
 
-    $("#hours").text((hoursOut < 10 ? '0' : '') + hoursOut);
-    $("#minutes").text((minutesOut < 10 ? '0' : '') + minutesOut);
-    $("#seconds").text((secondsOut < 10 ? '0' : '') + secondsOut);
+    $("#cd-hours").text((hoursOut < 10 ? '0' : '') + hoursOut);
+    $("#cd-minutes").text((minutesOut < 10 ? '0' : '') + minutesOut);
+    $("#cd-seconds").text((secondsOut < 10 ? '0' : '') + secondsOut);
   }, 0)
 }
 
@@ -394,6 +397,23 @@ function populateGuessList() {
       });
     }
   });
+}
+
+function startTimer() {
+  let start = Date.now();
+  timerInterval = setInterval(function() {
+    let delta = Date.now() - start;
+    let tmSeconds = Math.floor(delta / 1000) % 60;
+    let tmMinutes = Math.floor((delta / 1000) / 60);
+    $("#tm-seconds").html((tmSeconds < 10 ? '0' : '') + tmSeconds);
+    $("#tm-minutes").html((tmMinutes < 10 ? '0' : '') + tmMinutes);
+    timerValue = (tmMinutes < 10 ? '0' : '') + tmMinutes + ":" + (tmSeconds < 10 ? '0' : '') + tmSeconds;
+  }, 500);
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+  $(".timer-value").html(timerValue);
 }
 
 function randomGame() {
