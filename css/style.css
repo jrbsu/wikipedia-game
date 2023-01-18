@@ -298,18 +298,18 @@ strong {
   outline: #fff 2px solid;
 }
 
-#error {
+#error-box {
   color: #fff;
 }
-#error .modal-content {
+#error-box .modal-content {
   outline: 3px var(--color-red) solid;
   background: #40071c;
 }
-#error .modal-button {
+#error-box .modal-button {
   background-color: rgb(182, 22, 60);
   margin-top: 2rem;
 }
-#error .modal-button:hover {
+#error-box .modal-button:hover {
   background-color: var(--color-red);
   outline: rgb(255, 189, 189) 3px solid;
 }

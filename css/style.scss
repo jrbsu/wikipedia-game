@@ -298,13 +298,13 @@ strong {
   }
 }
 
-#error {
+#error-box {
   color: #fff;
   
   .modal-content
   {
     
-    outline: 3px var(--color-red) solid;
+    outline: var(--color-red) 3px solid;
     background: #40071c;
   }
 

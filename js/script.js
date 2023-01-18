@@ -354,7 +354,7 @@ $("#help-close").click(function () {
 });
 
 $("#error-play").click(() => {
-  $("#error").addClass("hidden");
+  $("#error-box").addClass("hidden");
   randomGame();
 })
 
@@ -401,7 +401,7 @@ function populateGuessList() {
 		let text = textWrapper.text();
 		let newTextHtml = text.replace(new RegExp("(" + keywords + ")", "gi"), '<span class="ui-autocomplete-term">$1</span>');
 		textWrapper.html(newTextHtml);
-        $(this).val("");
+        $("#guess").val("");
         return false;
       });
     }
