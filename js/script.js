@@ -401,9 +401,10 @@ function populateGuessList() {
 		let text = textWrapper.text();
 		let newTextHtml = text.replace(new RegExp("(" + keywords + ")", "gi"), '<span class="ui-autocomplete-term">$1</span>');
 		textWrapper.html(newTextHtml);
-        $("#guess").val("");
-        return false;
       });
+    },
+    select: function() {
+      $("#guess").val("");
     }
   });
 }
