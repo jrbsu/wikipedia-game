@@ -88,13 +88,16 @@ function mainFunction() {
       summaries = ["", "", "", "", "", "", "", "", "", ""];
       images = ["", "", "", "", "", "", "", "", "", ""];
       names = ["", "", "", "", "", "", "", "", "", ""];
+	  blocks = ["🟥","🟥","🟥","🟥","🟥","🟥","🟥","🟥","🟥","🟥"];
       correctArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
       topTen = [];
       lives = 3;
       points = 0;
       $(".answer").each(function () {
         $(this).css("background-color", "#222")
-          .css("background-image", "none");
+          .css("background-image", "none")
+		  .removeClass("wrong-answer")
+		  .removeClass("correct-answer");
       });
       $('#guess').attr('disabled', false);
       $("i").removeClass("fa-regular");
@@ -102,6 +105,7 @@ function mainFunction() {
       $('.points').html(points);
       $("#tm-seconds").html("00");
       $("#tm-minutes").html("00");
+      $("#tm-hours").html("00:");
       // </initialise>
 
       articles = data.items[0].articles;
@@ -196,6 +200,7 @@ function userCorrect(index) {
   let correctAnswer = ".answer:eq(" + index + ")";
   $(correctAnswer + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[index] + '" target="_blank">' + articleNamesNormalised[index] + '</a></strong>');
   $(correctAnswer).css('background-color', 'var(--green)');
+  $(correctAnswer).addClass("correct-answer");
   $(correctAnswer).css('background-image', 'url(' + images[index] + ')');
   if (correctArray.indexOf(index) > -1) {
     correctArray.splice(correctArray.indexOf(index), 1);
@@ -277,6 +282,7 @@ function gameOver() {
   $('#guess').attr('disabled', 'disabled');
   for (var i = 0; i < correctArray.length; i++) {
     let unanswered = ".answer:eq(" + correctArray[i] + ")";
+    $(unanswered).addClass("wrong-answer");
     $(unanswered).css('background-color', 'var(--red)');
     $(unanswered).css('background-image', 'url(' + images[correctArray[i]] + ')');
     $(unanswered + " .answer-text").html('<strong><a href="https://en.wikipedia.org/wiki/' + articleNames[correctArray[i]] + '" target="_blank">' + articleNamesNormalised[correctArray[i]] + '</a></strong>');
