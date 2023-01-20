@@ -414,10 +414,16 @@ function startTimer() {
   timerInterval = setInterval(function() {
     let delta = Date.now() - start;
     let tmSeconds = Math.floor(delta / 1000) % 60;
-    let tmMinutes = Math.floor((delta / 1000) / 60);
+    let tmMinutes = Math.floor(((delta / 1000) / 60) % 60);
+    let tmHours = Math.floor((delta / 1000) / 60 / 60);
     $("#tm-seconds").html((tmSeconds < 10 ? '0' : '') + tmSeconds);
     $("#tm-minutes").html((tmMinutes < 10 ? '0' : '') + tmMinutes);
-    timerValue = (tmMinutes < 10 ? '0' : '') + tmMinutes + ":" + (tmSeconds < 10 ? '0' : '') + tmSeconds;
+	if (tmHours > 0) {
+      $("#tm-hours").removeClass("hidden").html((tmHours < 10 ? '0' : '') + tmHours + ":");
+      timerValue = (tmHours < 10 ? '0' : '') + tmHours + ":" + (tmMinutes < 10 ? '0' : '') + tmMinutes + ":" + (tmSeconds < 10 ? '0' : '') + tmSeconds;
+	} else {
+	  timerValue = (tmMinutes < 10 ? '0' : '') + tmMinutes + ":" + (tmSeconds < 10 ? '0' : '') + tmSeconds;
+	}
   }, 500);
 }
 
